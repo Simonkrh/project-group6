@@ -27,7 +27,7 @@ public class GreenhouseSimulator {
   }
 
   /**
-   * Initialise the greenhouse but don't start the simulation just yet.
+   * Initialize the greenhouse but don't start the simulation just yet.
    */
   public void initialize() {
     createNode(1, 2, 1, 0, 0);
