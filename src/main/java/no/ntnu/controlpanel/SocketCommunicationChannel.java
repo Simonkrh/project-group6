@@ -28,6 +28,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         throw new UnsupportedOperationException("Unimplemented method 'sendActuatorChange'");
     }
 
+
     @Override
     public boolean open() {
         boolean isOpen = false;
@@ -38,5 +39,15 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             System.err.println("Could not open server socket: " + err.getMessage());
         }
         return isOpen;
+    }
+
+    public void close() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            System.err.println("Error while closing the server socket: " + e.getMessage());
+        }
     }
 }
