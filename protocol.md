@@ -21,6 +21,11 @@ distributed application.
 TODO - what transport-layer protocol do you use? TCP? UDP? What port number(s)? Why did you 
 choose this transport layer protocol?
 
+TCP is used as the transport-layer protocol, using port number(s) XXXXX. TCP is chosen for 
+its reliability since it ensures that no data is damaged, lost or delivered out of order. 
+This is crucial for accurate transmission of sensor data and control commands between the nodes
+in the network
+
 ## The architecture
 
 TODO - show the general architecture of your network. Which part is a server? Who are clients? 
