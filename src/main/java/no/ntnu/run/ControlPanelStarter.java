@@ -2,6 +2,7 @@ package no.ntnu.run;
 
 import no.ntnu.controlpanel.CommunicationChannel;
 import no.ntnu.controlpanel.ControlPanelLogic;
+import no.ntnu.controlpanel.ControlPanelServer;
 import no.ntnu.controlpanel.FakeCommunicationChannel;
 import no.ntnu.gui.controlpanel.ControlPanelApplication;
 import no.ntnu.tools.Logger;
@@ -56,6 +57,8 @@ public class ControlPanelStarter {
 
   private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic) {
     // TODO - here you initiate TCP/UDP socket communication
+    ControlPanelServer server = new ControlPanelServer(logic);
+    server.startServer();
     // You communication class(es) may want to get reference to the logic and call necessary
     // logic methods when events happen (for example, when sensor data is received)
     return null;
