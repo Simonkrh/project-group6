@@ -46,8 +46,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             if (socket != null && !socket.isClosed()) {
                 socket.close();
             }
-        } catch (IOException e) {
-            System.err.println("Error while closing the server socket: " + e.getMessage());
+        } catch (IOException err) {
+            System.err.println("Could not close server socket: " + err.getMessage());
         }
     }
 }
