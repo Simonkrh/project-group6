@@ -3,11 +3,14 @@ package no.ntnu.controlpanel;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ControlPanelServer {
     private static final int PORT_NUMBER = 10025;
     private ControlPanelLogic logic;
     private boolean isServerRunning;
+    private List<ClientHandler> connectedClients = new ArrayList<>();
 
     public ControlPanelServer(ControlPanelLogic logic) {
         this.logic = logic;
@@ -23,6 +26,7 @@ public class ControlPanelServer {
             while (this.isServerRunning) {
                 ClientHandler clientHandler = this.acceptNextClientConnection(serverSocket);
                 if (clientHandler != null) {
+                    this.connectedClients.add(clientHandler);
                     clientHandler.start();
                 }
             }
