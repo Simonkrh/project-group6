@@ -8,10 +8,15 @@ public class DeviceFactory {
   private static final double MIN_TEMPERATURE = 15;
   private static final double MAX_TEMPERATURE = 40;
   private static final String TEMPERATURE_UNIT = "°C";
+  private static final double NORMAL_GREENHOUSE_HUMIDITY = 80;
   private static final double MIN_HUMIDITY = 50;
   private static final double MAX_HUMIDITY = 100;
-  private static final double NORMAL_GREENHOUSE_HUMIDITY = 80;
   private static final String HUMIDITY_UNIT = "%";
+  private static final double NORMAL_GREENHOUSE_LIGHT_LEVEL = 75;
+  private static final double MIN_LIGHT_LEVEL = 50;
+  private static final double MAX_LIGHT_LEVEL = 100;
+  private static final String LEVEL_LEVEL_UNIT = "lx";
+
   private static final String SENSOR_TYPE_TEMPERATURE = "temperature";
 
   private static int nextNodeId = 1;
@@ -26,20 +31,24 @@ public class DeviceFactory {
    * Create a sensor/actuator device with specific number of sensors and actuators.
    *
    * @param temperatureSensorCount Number of temperature sensors to have on the node
-   * @param humiditySensorCount    Number of humidity sensors to have on the device
+   * @param humiditySensorCount    Number of humidity sensors to have on the node
+   * @param lightLevelSensorCount  Number of light level sensors to have on the node
    * @param windowCount            Number of windows the device is connected to
    * @param fanCount               Number of fans the device is connected to
    * @param heaterCount            Number of heaters the device is connected to
    * @return The created sensor/actuator device, with a unique ID
    */
   public static SensorActuatorNode createNode(int temperatureSensorCount, int humiditySensorCount,
-                                              int windowCount, int fanCount, int heaterCount) {
+                                              int lightLevelSensorCount, int windowCount, int fanCount, int heaterCount) {
     SensorActuatorNode node = new SensorActuatorNode(generateUniqueNodeId());
     if (temperatureSensorCount > 0) {
       node.addSensors(DeviceFactory.createTemperatureSensor(), temperatureSensorCount);
     }
     if (humiditySensorCount > 0) {
       node.addSensors(DeviceFactory.createHumiditySensor(), humiditySensorCount);
+    }
+    if (lightLevelSensorCount > 0) {
+      node.addSensors(DeviceFactory.createLightlevelSensor(), lightLevelSensorCount);
     }
     if (windowCount > 0) {
       addActuators(node, DeviceFactory.createWindow(node.getId()), windowCount);
@@ -85,6 +94,16 @@ public class DeviceFactory {
   public static Sensor createHumiditySensor() {
     return new Sensor("humidity", MIN_HUMIDITY, MAX_HUMIDITY,
         randomize(NORMAL_GREENHOUSE_HUMIDITY, 5.0), HUMIDITY_UNIT);
+  }
+
+  /**
+   * Create a typical light sensor.
+   *
+   * @return A typical light which can be used as a template
+   */
+  public static Sensor createLightlevelSensor() {
+    return new Sensor("lightLevel", MIN_LIGHT_LEVEL, MAX_LIGHT_LEVEL,
+            randomize(NORMAL_GREENHOUSE_LIGHT_LEVEL, 5.0), LEVEL_LEVEL_UNIT);
   }
 
   /**
