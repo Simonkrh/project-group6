@@ -44,6 +44,14 @@ public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListe
     this.communicationChannelListener = listener;
   }
 
+  public CommunicationChannel getCommunicationChannel() {
+    return this.communicationChannel;
+  }
+
+  public CommunicationChannelListener getCommunicationChannelListener() {
+    return this.communicationChannelListener;
+  }
+
   /**
    * Add an event listener.
    *
