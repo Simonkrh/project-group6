@@ -21,10 +21,10 @@ distributed application.
 TODO - what transport-layer protocol do you use? TCP? UDP? What port number(s)? Why did you 
 choose this transport layer protocol?
 
-TCP is used as the transport-layer protocol, using port number(s) XXXXX. TCP is chosen for 
+TCP is used as the transport-layer protocol, using port numbers 1024 and over. TCP is chosen for 
 its reliability since it ensures that no data is damaged, lost or delivered out of order. 
 This is crucial for accurate transmission of sensor data and control commands between the nodes
-in the network
+in the network. Although the UDP protocol is faster, the speed is not necessary for the communication between the nodes in this network.
 
 ## The architecture
 
