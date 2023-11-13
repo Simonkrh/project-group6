@@ -49,7 +49,7 @@ Intermediate server (IS)
 2. Manage coming request/data from the nodes.
 3. Handle routing between the sensors.
 
-TCP communication 
+TCP connection
 1. AN , SN and CPN initialize TCP connection to the server
 2. SN sends different data to the server 
 3. AN retrieves commands from the server and performs them
