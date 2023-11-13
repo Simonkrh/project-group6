@@ -28,8 +28,37 @@ in the network
 
 ## The architecture
 
+Sensor nodes (SN):
+1. Generate sensor data such as temperature humidity etc.
+2. Establish a tcp connection with the server.
+3. Send sensor data to the server regularly.
+
+Actuator nodes (AN):
+1. Control different elements either turning on or off, that can be (window , door , fan).
+2. Establish a tcp connection with the server.
+3. Receive commands through the server and perform them.
+
+Control panel node (CPN)
+1. Display received data from sensor nodes
+2. Send commands to actuator nodes
+3. Establish TCP connection with the server.
+4. Request sensor data or send command to AN.
+
+Intermediate server (IS)
+1. Facilitate communication between al the different nodes.
+2. Manage coming request/data from the nodes.
+3. Handle routing between the sensors.
+
+TCP communication 
+1. AN , SN and CPN initialize TCP connection to the server
+2. SN sends different data to the server 
+3. AN retrieves commands from the server and performs them
+4. CPN request SN data and send command to AN trough the server
+
 TODO - show the general architecture of your network. Which part is a server? Who are clients? 
 Do you have one or several servers? Perhaps include a picture here. 
+
+
 
 
 ## The flow of information and events
