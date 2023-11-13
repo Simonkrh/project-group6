@@ -21,10 +21,10 @@ distributed application.
 TODO - what transport-layer protocol do you use? TCP? UDP? What port number(s)? Why did you 
 choose this transport layer protocol?
 
-TCP is used as the transport-layer protocol, using port number(s) XXXXX. TCP is chosen for 
+TCP is used as the transport-layer protocol, using port numbers 1024 and over. TCP is chosen for 
 its reliability since it ensures that no data is damaged, lost or delivered out of order. 
 This is crucial for accurate transmission of sensor data and control commands between the nodes
-in the network
+in the network. Although the UDP protocol is faster, the speed is not necessary for the communication between the nodes in this network.
 
 ## The architecture
 
@@ -67,10 +67,24 @@ TODO - describe what each network node does and when. Some periodic events? Some
 incoming packets? Perhaps split into several subsections, where each subsection describes one 
 node type (For example: one subsection for sensor/actuator nodes, one for control panel nodes).
 
+The flow of information and events starts with **sensor nodes** collecting environmental data, which 
+can include temperature, humidity and light level. This data is transferred to the **control panel nodes** 
+where the readings will be displayed in real time. The control panel nodes serves as the central hub and 
+can send commands to the **actuator nodes** based on the readings sent by the sensor nodes. The actuator nodes 
+can execute actions like opening a window, turning on a fan, turning on a heater, etc...
+
+This process is event driven where the control panel can respond dynamically to changes in sensor readings 
+or user commands by sending commands to the actuator nodes. 
+
 ## Connection and state
 
 TODO - is your communication protocol connection-oriented or connection-less? Is it stateful or 
 stateless? 
+
+We use a TCP communication protocol which is connection-oriented. This means that a logical connection
+is required throughout the entire time that communication is taking place.
+The communication protocol we use is also stateful. This ensures reliability when delivering packets
+from sender to receiver.
 
 ## Types, constants
 
