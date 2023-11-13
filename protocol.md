@@ -43,6 +43,11 @@ node type (For example: one subsection for sensor/actuator nodes, one for contro
 TODO - is your communication protocol connection-oriented or connection-less? Is it stateful or 
 stateless? 
 
+We use a TCP communication protocol which is connection-oriented. This means that a logical connection
+is required throughout the entire time that communication is taking place.
+The communication protocol we use is also stateful. This ensures reliability when delivering packets
+from sender to receiver.
+
 ## Types, constants
 
 TODO - Do you have some specific value types you use in several messages? They you can describe 
