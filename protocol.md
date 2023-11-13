@@ -38,6 +38,15 @@ TODO - describe what each network node does and when. Some periodic events? Some
 incoming packets? Perhaps split into several subsections, where each subsection describes one 
 node type (For example: one subsection for sensor/actuator nodes, one for control panel nodes).
 
+The flow of information and events starts with **sensor nodes** collecting environmental data, which 
+can include temperature, humidity and light level. This data is transferred to the **control panel nodes** 
+where the readings will be displayed in real time. The control panel nodes serves as the central hub and 
+can send commands to the **actuator nodes** based on the readings sent by the sensor nodes. The actuator nodes 
+can execute actions like opening a window, turning on a fan, turning on a heater, etc...
+
+This process is event driven where the control panel can respond dynamically to changes in sensor readings 
+or user commands by sending commands to the actuator nodes. 
+
 ## Connection and state
 
 TODO - is your communication protocol connection-oriented or connection-less? Is it stateful or 
