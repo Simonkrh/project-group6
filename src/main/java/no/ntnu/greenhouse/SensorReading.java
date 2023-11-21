@@ -23,18 +23,38 @@ public class SensorReading {
     this.unit = unit;
   }
 
+  /**
+   * Get the type of sensor which is being red.
+   *
+   * @return The type of sensor which is being red
+   */
   public String getType() {
     return type;
   }
 
+  /**
+   * Get the current value of the sensor reading.
+   *
+   * @return The current value of the sensor reading
+   */
   public double getValue() {
     return value;
   }
 
+  /**
+   * Get the unit for the sensor reading.
+   *
+   * @return The unit for the sensor reading
+   */
   public String getUnit() {
     return unit;
   }
 
+  /**
+   * Set the value of the sensor reading.
+   *
+   * @param newValue The new value to set the sensor reading value to
+   */
   public void setValue(double newValue) {
     this.value = newValue;
   }
