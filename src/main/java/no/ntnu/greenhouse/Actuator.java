@@ -71,6 +71,11 @@ public class Actuator {
     impacts.put(sensorType, diffWhenActive);
   }
 
+  /**
+   * Retrieves the type of the actuator.
+   *
+   * @return The type of the actuator as a String. This type represents the category or functionality of the actuator, such as "heater", "cooler", or "light".
+   */
   public String getType() {
     return type;
   }
@@ -165,6 +170,11 @@ public class Actuator {
     return id;
   }
 
+  /**
+   * Returns the ID of the node to which this actuator is connected.
+   *
+   * @return The node ID indicating the specific sensor/actuator node in the network where this actuator is located.
+   */
   public int getNodeId() {
     return nodeId;
   }
