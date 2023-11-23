@@ -7,6 +7,7 @@ import no.ntnu.controlpanel.SocketCommunicationChannel;
 import no.ntnu.gui.controlpanel.ControlPanelApplication;
 import no.ntnu.tools.Logger;
 
+
 /**
  * Starter class for the control panel.
  * Note: we could launch the Application class directly, but then we would have issues with the
@@ -57,7 +58,7 @@ public class ControlPanelStarter {
 
   private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic) {
     // TODO - here you initiate TCP/UDP socket communication
-    SocketCommunicationChannel channel = new SocketCommunicationChannel(logic, 10025);
+    SocketCommunicationChannel channel = new SocketCommunicationChannel(logic,);
     logic.setCommunicationChannel(channel);
     // You communication class(es) may want to get reference to the logic and call necessary
     // logic methods when events happen (for example, when sensor data is received)
