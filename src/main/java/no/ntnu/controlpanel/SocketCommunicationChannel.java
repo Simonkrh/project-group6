@@ -28,7 +28,6 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         throw new UnsupportedOperationException("Unimplemented method 'sendActuatorChange'");
     }
 
-
     @Override
     public boolean open() {
         boolean isOpen = false;

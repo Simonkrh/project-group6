@@ -67,7 +67,6 @@ public class FakeCommunicationChannel implements CommunicationChannel {
     }
   }
 
-
   /**
    * Spawn a new sensor/actuator node information after a given delay.
    *
