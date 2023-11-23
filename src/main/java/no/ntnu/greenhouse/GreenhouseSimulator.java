@@ -1,5 +1,7 @@
 package no.ntnu.greenhouse;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +17,7 @@ public class GreenhouseSimulator {
 
   private final List<PeriodicSwitch> periodicSwitches = new LinkedList<>();
   private final boolean fake;
+  private ServerSocket serverSocket;
 
   /**
    * Create a greenhouse simulator.
@@ -65,8 +68,16 @@ public class GreenhouseSimulator {
     }
   }
 
-  private void initiateRealCommunication() {
-    // TODO - here you can set up the TCP or UDP communication
+
+private void initiateRealCommunication() {
+  // TODO - here you can set up the TCP or UDP communication
+    int port = 10025;
+    try {
+      serverSocket = new ServerSocket(port);
+    } catch (IOException err) {
+        err.printStackTrace();
+    }
+
   }
 
   private void initiateFakePeriodicSwitches() {
