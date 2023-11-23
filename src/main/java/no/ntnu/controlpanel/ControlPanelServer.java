@@ -8,12 +8,12 @@ import java.util.List;
 
 public class ControlPanelServer {
     private static final int PORT_NUMBER = 10025;
-    private ControlPanelLogic logic;
+    private ControlPanelLogic controlPanelLogic;
     private boolean isServerRunning;
     private List<ClientHandler> connectedClients = new ArrayList<>();
 
     public ControlPanelServer(ControlPanelLogic logic) {
-        this.logic = logic;
+        this.controlPanelLogic = logic;
         this.isServerRunning = false;
     }
 
