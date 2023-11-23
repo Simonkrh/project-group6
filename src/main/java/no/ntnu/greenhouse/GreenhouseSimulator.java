@@ -74,8 +74,9 @@ private void initiateRealCommunication() {
     int port = 10025;
     try {
       serverSocket = new ServerSocket(port);
-    } catch (IOException err) {
-        err.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new RuntimeException(e);
     }
 
   }
@@ -102,6 +103,11 @@ private void initiateRealCommunication() {
       }
     } else {
       // TODO - here you stop the TCP/UDP communication
+      try {
+        this.serverSocket.close();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 
