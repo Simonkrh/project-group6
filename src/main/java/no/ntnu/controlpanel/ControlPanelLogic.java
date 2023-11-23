@@ -1,7 +1,10 @@
 package no.ntnu.controlpanel;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
 import no.ntnu.greenhouse.Actuator;
 import no.ntnu.greenhouse.SensorReading;
 import no.ntnu.listeners.common.ActuatorListener;
@@ -22,6 +25,7 @@ import no.ntnu.tools.Logger;
 public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListener,
     CommunicationChannelListener {
   private final List<GreenhouseEventListener> listeners = new LinkedList<>();
+  private Map<Integer, Map<Integer, Boolean>> actuatorStates = new HashMap<>();
 
   private CommunicationChannel communicationChannel;
   private CommunicationChannelListener communicationChannelListener;
@@ -52,6 +56,11 @@ public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListe
     return this.communicationChannelListener;
   }
 
+  public boolean isActuatorOn(int nodeId, int actuatorId) {
+    Map<Integer, Boolean> nodeActuators = actuatorStates.getOrDefault(nodeId, new HashMap<>());
+    return nodeActuators.getOrDefault(actuatorId, false);
+  }
+
   /**
    * Add an event listener.
    *
@@ -80,6 +89,7 @@ public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListe
 
   @Override
   public void onActuatorStateChanged(int nodeId, int actuatorId, boolean isOn) {
+    actuatorStates.computeIfAbsent(nodeId, k -> new HashMap<>()).put(actuatorId, isOn);
     listeners.forEach(listener -> listener.onActuatorStateChanged(nodeId, actuatorId, isOn));
   }
 
