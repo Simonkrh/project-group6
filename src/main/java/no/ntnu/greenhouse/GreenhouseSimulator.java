@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import no.ntnu.controlpanel.ControlPanelLogic;
 import no.ntnu.listeners.greenhouse.NodeStateListener;
 import no.ntnu.tools.Logger;
 
@@ -21,6 +23,7 @@ public class GreenhouseSimulator {
   private List<ClientHandler> connectedClients = new ArrayList<>();
   private final boolean fake;
   private ServerSocket serverSocket;
+  private ControlPanelLogic logic;
 
   /**
    * Create a greenhouse simulator.
@@ -28,8 +31,12 @@ public class GreenhouseSimulator {
    * @param fake When true, simulate a fake periodic events instead of creating
    *             socket communication
    */
-  public GreenhouseSimulator(boolean fake) {
+  public GreenhouseSimulator(boolean fake, ControlPanelLogic logic) {
     this.fake = fake;
+  }
+
+  public ControlPanelLogic getLogic() {
+    return this.logic;
   }
 
   /**

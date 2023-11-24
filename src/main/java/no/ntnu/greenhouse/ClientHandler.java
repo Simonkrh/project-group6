@@ -30,13 +30,15 @@ public class ClientHandler extends Thread {
         try {
             while (!clientSocket.isClosed()) {
                 String clientRequest = this.socketReader.readLine();
-                if (clientRequest == null) {
-                    break;
-                }
                 Command clientCommand = processRequest(clientRequest);
-                response = clientCommand.execute(this.greenhouseSimulator.)
+                if (clientRequest == null) {
+                    clientCommand = null;
+                }
 
-                this.socketWriter.println(clientCommand);
+                response = clientCommand.execute(this.greenhouseSimulator.getLogic());
+                if (response != null) {
+                    this.sendResponseToClient(response);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,6 +58,10 @@ public class ClientHandler extends Thread {
             clientMessage = null;
         }
         return (Command) clientMessage;
+    }
+
+    private void sendResponseToClient(Message message) {
+        this.socketWriter.println(MessageSerializer.toString(message));
     }
 
     private void closeConnection() {
