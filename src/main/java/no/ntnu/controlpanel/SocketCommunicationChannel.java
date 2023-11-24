@@ -1,15 +1,16 @@
 package no.ntnu.controlpanel;
 
 import java.io.IOException;
-import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * A socket communication channel.
  */
 public class SocketCommunicationChannel implements CommunicationChannel {
     private final int PORT_NUMBER;
+    private String serverHost = "localhost";
     private final ControlPanelLogic logic;
-    private ServerSocket socket;
+    private Socket socket;
 
     /**
      * Creates a new socket communication channel.
@@ -32,7 +33,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     public boolean open() {
         boolean isOpen = false;
         try {
-            socket = new ServerSocket(PORT_NUMBER);
+            this.socket = new Socket(serverHost, PORT_NUMBER);
             isOpen = true;
         } catch (IOException err) {
             System.err.println("Could not open server socket: " + err.getMessage());
