@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import no.ntnu.message.Command;
+import no.ntnu.message.Message;
+import no.ntnu.message.MessageSerializer;
 import no.ntnu.tools.Logger;
 
 public class ClientHandler extends Thread {
@@ -23,15 +26,17 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
+        Message response;
         try {
             while (!clientSocket.isClosed()) {
                 String clientRequest = this.socketReader.readLine();
                 if (clientRequest == null) {
                     break;
                 }
+                Command clientCommand = processRequest(clientRequest);
+                response = clientCommand.execute(this.greenhouseSimulator.)
 
-                String response = processRequest(clientRequest);
-                socketWriter.println(response);
+                this.socketWriter.println(clientCommand);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,9 +46,16 @@ public class ClientHandler extends Thread {
         this.greenhouseSimulator.disconnectClient(this);
     }
 
-    private String processRequest(String clientRequest) {
-        // TODO - Implement method to process client's request
-        return "Response to: " + clientRequest;
+    private Command processRequest(String clientRequest) {
+        Message clientMessage = null;
+        clientMessage = MessageSerializer.fromString(clientRequest);
+        if (!(clientMessage instanceof Command)) {
+            if (clientMessage != null) {
+                System.err.println("Message from client is not valid: " + clientMessage);
+            }
+            clientMessage = null;
+        }
+        return (Command) clientMessage;
     }
 
     private void closeConnection() {
