@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import no.ntnu.tools.Logger;
+
 public class ClientHandler extends Thread {
     private Socket clientSocket;
     private GreenhouseSimulator greenhouseSimulator;
@@ -35,7 +37,8 @@ public class ClientHandler extends Thread {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        this.greenhouseSimulator.stop();
+        Logger.info("Client " + this.clientSocket.getRemoteSocketAddress() + " leaving");
+        this.greenhouseSimulator.disconnectClient(this);
     }
 
     private String processRequest(String clientRequest) {

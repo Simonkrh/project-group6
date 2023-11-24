@@ -2,6 +2,8 @@ package no.ntnu.greenhouse;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +18,7 @@ public class GreenhouseSimulator {
   private final Map<Integer, SensorActuatorNode> nodes = new HashMap<>();
 
   private final List<PeriodicSwitch> periodicSwitches = new LinkedList<>();
+  private List<ClientHandler> connectedClients = new ArrayList<>();
   private final boolean fake;
   private ServerSocket serverSocket;
 
@@ -68,12 +71,35 @@ public class GreenhouseSimulator {
     }
   }
 
+  private void handleNewClients() {
+    while (this.serverSocket != null) {
+      ClientHandler clientHandler = this.acceptNextClientConnection(serverSocket);
+      if (clientHandler != null) {
+        this.connectedClients.add(clientHandler);
+        clientHandler.start();
+      }
+    }
+  }
 
-private void initiateRealCommunication() {
+  private ClientHandler acceptNextClientConnection(ServerSocket listeningSocket) {
+      ClientHandler clientHandler = null;
+      try {
+        Socket clientSocket = listeningSocket.accept();
+        Logger.info("New client connected from " + clientSocket.getRemoteSocketAddress());
+        clientHandler = new ClientHandler(clientSocket, this);
+      } catch (IOException err) {
+        Logger.error("Could not accept client connection: " + err.getMessage());
+      }
+      return clientHandler;
+    }
+
+  private void initiateRealCommunication() {
   // TODO - here you can set up the TCP or UDP communication
     int port = 10025;
     try {
       serverSocket = new ServerSocket(port);
+
+      new Thread(() -> handleNewClients()).start();
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException(e);
@@ -120,5 +146,9 @@ private void initiateRealCommunication() {
     for (SensorActuatorNode node : nodes.values()) {
       node.addStateListener(listener);
     }
+  }
+
+  public boolean disconnectClient(ClientHandler clientHandler) {
+    return this.connectedClients.remove(clientHandler);
   }
 }
