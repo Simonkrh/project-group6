@@ -2,6 +2,7 @@ package no.ntnu.greenhouse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -11,9 +12,11 @@ public class ClientHandler extends Thread {
     private BufferedReader socketReader;
     private PrintWriter socketWriter;
 
-    public ClientHandler(Socket socket, GreenhouseSimulator greenhouseSimulator) {
+    public ClientHandler(Socket socket, GreenhouseSimulator greenhouseSimulator) throws IOException {
         this.greenhouseSimulator = greenhouseSimulator;
         this.clientSocket = socket;
+        this.socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.socketWriter = new PrintWriter(socket.getOutputStream(), true);
     }
 
     @Override
