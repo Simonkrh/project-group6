@@ -1,12 +1,28 @@
 package no.ntnu.message;
 
+/**
+ * Represents a serializer for messages to protocol-defined strings and vice
+ * versa.
+ */
 public class MessageSerializer {
     public static final String TURN_ON_ACTUATORS_COMMAND = "on";
     public static final String TURN_OFF_ACTUATORS_COMMAND = "off";
 
+    /**
+     * Creates a new instance of the MessageSerializer class.
+     *
+     * It is left empty to avoid unwanted initialization of the class.
+     */
     private MessageSerializer() {
     }
 
+    /**
+     * Creates a message from a specified string, according to the communication
+     * protocol.
+     *
+     * @param string the string sent over the communication channel.
+     * @return the message interpreted according to the protocol.
+     */
     public static Message fromString(String string) {
         if (string == null) {
             return null;
@@ -21,7 +37,12 @@ public class MessageSerializer {
         return message;
     }
 
-
+    /**
+     * Parses the parametrized message.
+     *
+     * @param string the string sent over the communication channel
+     * @return the logical message, as interpreted according to the protocol
+     */
     private static Message parseParametrizedMessage(String string) {
         String[] parts = string.split(":");
         if (parts.length < 3) {
@@ -53,6 +74,12 @@ public class MessageSerializer {
         return message;
     }
 
+    /**
+     * Converts a message to a serialized string.
+     *
+     * @param message the message to translate
+     * @return string representation of the message
+     */
     public static String toString(Message message) {
         String string = null;
         if (message instanceof TurnOnActuatorCommand turnOnActuatorCommand) {
