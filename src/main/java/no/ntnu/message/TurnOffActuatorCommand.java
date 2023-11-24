@@ -17,4 +17,12 @@ public class TurnOffActuatorCommand extends Command {
         logic.onActuatorStateChanged(nodeId, actuatorId, false);
         return new ActuatorStateMessage(nodeId, actuatorId, logic.isActuatorOn(nodeId, actuatorId));
     }
+
+    public int getNodeId() {
+        return nodeId;
+    }
+
+    public int getActuatorId() {
+        return actuatorId;
+    }
 }
