@@ -92,9 +92,11 @@ public class ControlPanelStarter {
   }
 
   private void stopCommunication() {
-    // TODO - here you stop the TCP/UDP socket communication
-    SocketCommunicationChannel socketChannel = (SocketCommunicationChannel) channel;
-    socketChannel.close();
-    Logger.info("Socket communication channel closed.");
+    if (channel instanceof SocketCommunicationChannel) {
+      SocketCommunicationChannel socketChannel = (SocketCommunicationChannel) channel;
+      socketChannel.close();
+      Logger.info("Socket communication channel closed.");
+    }
   }
+
 }

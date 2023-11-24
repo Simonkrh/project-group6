@@ -98,7 +98,6 @@ public class GreenhouseSimulator {
     int port = 10025;
     try {
       serverSocket = new ServerSocket(port);
-
       new Thread(() -> handleNewClients()).start();
     } catch (IOException e) {
       e.printStackTrace();

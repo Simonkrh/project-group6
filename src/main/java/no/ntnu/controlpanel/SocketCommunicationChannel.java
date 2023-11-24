@@ -1,7 +1,11 @@
 package no.ntnu.controlpanel;
 
+import no.ntnu.tools.Logger;
+
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * A socket communication channel.
@@ -25,8 +29,20 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public void sendActuatorChange(int nodeId, int actuatorId, boolean isOn) {
-        // TODO implement this method
-        throw new UnsupportedOperationException("Unimplemented method 'sendActuatorChange'");
+        if(socket!= null && !socket.isClosed()){
+            String change = "Actuator change " + nodeId + " " + actuatorId + (isOn ? "ON" : "OFF");
+            try {
+                OutputStream out = socket.getOutputStream();
+                byte [] bytes = change.getBytes(StandardCharsets.UTF_8);
+                out.write(bytes);
+                Logger.info("The change is " + change);
+            } catch (IOException e) {
+               Logger.error("Could not send the change ");
+            }
+        }
+        else {
+            Logger.error("Could not connect the socket");
+        }
     }
 
     @Override
