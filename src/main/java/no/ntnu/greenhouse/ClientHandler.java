@@ -32,7 +32,7 @@ public class ClientHandler extends Thread {
             try {
                 clientRequest = this.socketReader.readLine();
             } catch (IOException e) {
-                System.err.println("Client request was not recieved: " + e.getMessage());
+                System.err.println("Client request was not received: " + e.getMessage());
             }
             Command clientCommand = processRequest(clientRequest);
             if (clientCommand != null) {
