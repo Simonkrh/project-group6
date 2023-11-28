@@ -33,6 +33,7 @@ public class GreenhouseSimulator {
    */
   public GreenhouseSimulator(boolean fake, ControlPanelLogic logic) {
     this.fake = fake;
+    this.logic = logic;
   }
 
   public ControlPanelLogic getLogic() {

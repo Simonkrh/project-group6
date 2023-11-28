@@ -31,13 +31,11 @@ public class ClientHandler extends Thread {
             while (!clientSocket.isClosed()) {
                 String clientRequest = this.socketReader.readLine();
                 Command clientCommand = processRequest(clientRequest);
-                if (clientRequest == null) {
-                    clientCommand = null;
-                }
-
-                response = clientCommand.execute(this.greenhouseSimulator.getLogic());
-                if (response != null) {
-                    this.sendResponseToClient(response);
+                if (clientCommand != null) {
+                    response = clientCommand.execute(this.greenhouseSimulator.getLogic());
+                    if (response != null) {
+                        this.sendResponseToClient(response);
+                    }
                 }
             }
         } catch (IOException e) {
