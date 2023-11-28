@@ -58,9 +58,6 @@ TCP connection
 TODO - show the general architecture of your network. Which part is a server? Who are clients? 
 Do you have one or several servers? Perhaps include a picture here. 
 
-
-
-
 ## The flow of information and events
 
 TODO - describe what each network node does and when. Some periodic events? Some reaction on 
@@ -96,6 +93,24 @@ them here.
 TODO - describe the general format of all messages. Then describe specific format for each 
 message type in your protocol.
 
+### Turning an Actuator on
+
+When turning on an Actuator:
+
+1. The client sends a "Turn ON Actuator" command, which will be encoded as `on:nodeId:actuatorId`
+   in the socket, where nodeId and actuatorId are identifiers for the specific actuator.
+2. The server sends a "Actuator ON" message to all the connected clients, 
+   which is encoded as `ACTUATORON:nodeId:actuatorId`.
+
+### Turning an Actuator off
+
+When turning off an Actuator:
+
+1. The client sends a "Turn OFF Actuator" command, which is encoded as `off:nodeId:actuatorId`
+   in the socket, where nodeId and actuatorId are identifiers for the specific actuator.
+2. The server sends a "Actuator OFF" message to all the connected clients, 
+   which is encoded as `ACTUATOROFF:nodeId:actuatorId`.
+ 
 ### Error messages
 
 TODO - describe the possible error messages that nodes can send in your system.

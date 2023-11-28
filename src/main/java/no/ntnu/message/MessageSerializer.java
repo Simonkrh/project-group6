@@ -12,7 +12,6 @@ public class MessageSerializer {
 
     /**
      * Creates a new instance of the MessageSerializer class.
-     *
      * It is left empty to avoid unwanted initialization of the class.
      */
     private MessageSerializer() {
