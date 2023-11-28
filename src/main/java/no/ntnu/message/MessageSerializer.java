@@ -1,5 +1,13 @@
 package no.ntnu.message;
 
+import no.ntnu.greenhouse.SensorReading;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static no.ntnu.tools.Parser.parseDoubleOrError;
+import static no.ntnu.tools.Parser.parseIntegerOrError;
+
 /**
  * Represents a serializer for messages to protocol-defined strings and vice
  * versa.
@@ -7,8 +15,9 @@ package no.ntnu.message;
 public class MessageSerializer {
     public static final String TURN_ON_ACTUATORS_COMMAND = "on";
     public static final String TURN_OFF_ACTUATORS_COMMAND = "off";
-    public static final String ACTUATOR_STATE_ON_MESSAGE = "ACTUATORON";
-    public static final String ACTUATOR_STATE_OFF_MESSAGE = "ACTUATOROFF";
+    public static final String ACTUATOR_STATE_ON_MESSAGE = "ACTUATOR_ON";
+    public static final String ACTUATOR_STATE_OFF_MESSAGE = "ACTUATOR_OFF";
+    public static final String SENSOR_DATA_ADVERTISEMENT = "SENSOR_DATA";
 
     /**
      * Creates a new instance of the MessageSerializer class.
@@ -35,12 +44,13 @@ public class MessageSerializer {
                 string.startsWith(TURN_OFF_ACTUATORS_COMMAND) ||
                 string.startsWith(ACTUATOR_STATE_ON_MESSAGE) ||
                 string.startsWith(ACTUATOR_STATE_OFF_MESSAGE)) {
-            message = parseParametrizedMessage(string);
+            message = parseCommandMessage(string);
+        } else if (string.startsWith(SENSOR_DATA_ADVERTISEMENT)) {
+            message = parseSensorDataAdvertisementMessage(string);
         }
 
         return message;
     }
-
 
     /**
      * Parses the parametrized message.
@@ -48,7 +58,7 @@ public class MessageSerializer {
      * @param string the string sent over the communication channel
      * @return the logical message, as interpreted according to the protocol
      */
-    private static Message parseParametrizedMessage(String string) {
+    private static Message parseCommandMessage(String string) {
         String[] parts = string.split(":");
         if (parts.length < 3) {
             return null;
@@ -85,8 +95,54 @@ public class MessageSerializer {
         return message;
     }
 
+    /**
+     * Parses a sensor data advertisement message from the given string.
+     * The expected format is "SENSOR_DATA:nodeId;sensorType1=value1 unit1,sensorType2=value2 unit2,...".
+     *
+     * @param string the string containing the sensor data advertisement information.
+     * @return a SensorDataAdvertisementMessage object representing the parsed data.
+     * @throws IllegalArgumentException if the string format is incorrect or data is invalid.
+     */
+    private static SensorDataAdvertisementMessage parseSensorDataAdvertisementMessage(String string) {
+        if (string == null || string.isEmpty()) {
+            throw new IllegalArgumentException("Sensor specification can't be empty");
+        }
 
+        String[] parts = string.split(";");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Incorrect specification format: " + string);
+        }
 
+        int nodeId = parseIntegerOrError(parts[0], "Invalid node ID:" + parts[0]);
+        List<SensorReading> sensors = parseSensors(parts[1]);
+
+        return new SensorDataAdvertisementMessage(nodeId, sensors);
+    }
+
+    private static List<SensorReading> parseSensors(String sensorInfo) {
+        List<SensorReading> readings = new LinkedList<>();
+        String[] readingInfo = sensorInfo.split(",");
+
+        for (String reading : readingInfo) {
+            readings.add(parseReading(reading));
+        }
+        return readings;
+    }
+
+    private static SensorReading parseReading(String reading) {
+        String[] assignmentParts = reading.split("=");
+        if (assignmentParts.length != 2) {
+            throw new IllegalArgumentException("Invalid sensor reading specified: " + reading);
+        }
+        String[] valueParts = assignmentParts[1].split(" ");
+        if (valueParts.length != 2) {
+            throw new IllegalArgumentException("Invalid sensor value/unit: " + reading);
+        }
+        String sensorType = assignmentParts[0];
+        double value = parseDoubleOrError(valueParts[0], "Invalid sensor value: " + valueParts[0]);
+        String unit = valueParts[1];
+        return new SensorReading(sensorType, value, unit);
+    }
 
     /**
      * Converts a message to a serialized string.
