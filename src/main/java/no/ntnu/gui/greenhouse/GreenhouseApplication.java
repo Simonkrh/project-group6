@@ -71,6 +71,7 @@ public class GreenhouseApplication extends Application implements NodeStateListe
       Platform.runLater(window::close);
       if (nodeWindows.isEmpty()) {
         Platform.runLater(mainStage::close);
+        this.closeApplication();
       }
     }
   }
