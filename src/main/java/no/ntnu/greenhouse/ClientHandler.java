@@ -46,7 +46,7 @@ public class ClientHandler extends Thread {
             }
         } while (response != null);
         Logger.info("Client " + this.clientSocket.getRemoteSocketAddress() + " leaving");
-        this.greenhouseSimulator.disconnectClient(this);
+        this.closeConnection();
     }
 
     private Command processRequest(String clientRequest) {
@@ -75,6 +75,9 @@ public class ClientHandler extends Thread {
             }
             if (this.clientSocket != null) {
                 this.clientSocket.close();
+            }
+            if (this.greenhouseSimulator != null) {
+                this.greenhouseSimulator.disconnectClient(this);
             }
         } catch(IOException e) {
             e.printStackTrace();
