@@ -28,8 +28,11 @@ public class ClientHandler extends Thread {
     public void run() {
         Message response;
         try {
-            while (!clientSocket.isClosed()) {
+            while (!this.clientSocket.isClosed()) {
                 String clientRequest = this.socketReader.readLine();
+                if (clientRequest == null) {
+                    this.closeConnection();
+                }
                 Command clientCommand = processRequest(clientRequest);
                 if (clientCommand != null) {
                     response = clientCommand.execute(this.greenhouseSimulator.getLogic());
@@ -40,7 +43,6 @@ public class ClientHandler extends Thread {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
         Logger.info("Client " + this.clientSocket.getRemoteSocketAddress() + " leaving");
         this.greenhouseSimulator.disconnectClient(this);
