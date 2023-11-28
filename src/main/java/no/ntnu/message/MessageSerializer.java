@@ -7,10 +7,11 @@ package no.ntnu.message;
 public class MessageSerializer {
     public static final String TURN_ON_ACTUATORS_COMMAND = "on";
     public static final String TURN_OFF_ACTUATORS_COMMAND = "off";
+    public static final String ACTUATOR_STATE_ON_MESSAGE = "ACTUATORON";
+    public static final String ACTUATOR_STATE_OFF_MESSAGE = "ACTUATOROFF";
 
     /**
      * Creates a new instance of the MessageSerializer class.
-     *
      * It is left empty to avoid unwanted initialization of the class.
      */
     private MessageSerializer() {
@@ -30,12 +31,16 @@ public class MessageSerializer {
 
         Message message = null;
 
-        if (string.startsWith(TURN_ON_ACTUATORS_COMMAND) || string.startsWith(TURN_OFF_ACTUATORS_COMMAND)) {
+        if (string.startsWith(TURN_ON_ACTUATORS_COMMAND) ||
+                string.startsWith(TURN_OFF_ACTUATORS_COMMAND) ||
+                string.startsWith(ACTUATOR_STATE_ON_MESSAGE) ||
+                string.startsWith(ACTUATOR_STATE_OFF_MESSAGE)) {
             message = parseParametrizedMessage(string);
         }
 
         return message;
     }
+
 
     /**
      * Parses the parametrized message.
@@ -68,11 +73,20 @@ public class MessageSerializer {
             case TURN_OFF_ACTUATORS_COMMAND:
                 message = new TurnOffActuatorCommand(nodeId, actuatorId);
                 break;
+            case ACTUATOR_STATE_ON_MESSAGE:
+                message = new ActuatorStateMessage(nodeId, actuatorId, true);
+                break;
+            case ACTUATOR_STATE_OFF_MESSAGE:
+                message = new ActuatorStateMessage(nodeId, actuatorId, false);
+                break;
             default:
                 break;
         }
         return message;
     }
+
+
+
 
     /**
      * Converts a message to a serialized string.
@@ -86,6 +100,8 @@ public class MessageSerializer {
             string = TURN_ON_ACTUATORS_COMMAND + ":" + turnOnActuatorCommand.getNodeId() + ":" + turnOnActuatorCommand.getActuatorId();
         } else if (message instanceof TurnOffActuatorCommand turnOffActuatorCommand) {
             string = TURN_OFF_ACTUATORS_COMMAND + ":" + turnOffActuatorCommand.getNodeId() + ":" + turnOffActuatorCommand.getActuatorId();
+        } else if (message instanceof ActuatorStateMessage actuatorStateMessage) {
+            string = actuatorStateMessage.isOn() ? ACTUATOR_STATE_ON_MESSAGE : ACTUATOR_STATE_OFF_MESSAGE;
         }
         return string;
     }

@@ -18,9 +18,6 @@ distributed application.
 
 ## The underlying transport protocol
 
-TODO - what transport-layer protocol do you use? TCP? UDP? What port number(s)? Why did you 
-choose this transport layer protocol?
-
 TCP is used as the transport-layer protocol, using port numbers 1024 and over. TCP is chosen for 
 its reliability since it ensures that no data is damaged, lost or delivered out of order. 
 This is crucial for accurate transmission of sensor data and control commands between the nodes
@@ -55,17 +52,7 @@ TCP connection
 3. AN retrieves commands from the server and performs them
 4. CPN request SN data and send command to AN trough the server
 
-TODO - show the general architecture of your network. Which part is a server? Who are clients? 
-Do you have one or several servers? Perhaps include a picture here. 
-
-
-
-
 ## The flow of information and events
-
-TODO - describe what each network node does and when. Some periodic events? Some reaction on 
-incoming packets? Perhaps split into several subsections, where each subsection describes one 
-node type (For example: one subsection for sensor/actuator nodes, one for control panel nodes).
 
 The flow of information and events starts with **sensor nodes** collecting environmental data, which 
 can include temperature, humidity and light level. This data is transferred to the **control panel nodes** 
@@ -77,9 +64,6 @@ This process is event driven where the control panel can respond dynamically to 
 or user commands by sending commands to the actuator nodes. 
 
 ## Connection and state
-
-TODO - is your communication protocol connection-oriented or connection-less? Is it stateful or 
-stateless? 
 
 We use a TCP communication protocol which is connection-oriented. This means that a logical connection
 is required throughout the entire time that communication is taking place.
@@ -96,6 +80,24 @@ them here.
 TODO - describe the general format of all messages. Then describe specific format for each 
 message type in your protocol.
 
+### Turning an Actuator on
+
+When turning on an Actuator:
+
+1. The client sends a "Turn ON Actuator" command, which will be encoded as `on:nodeId:actuatorId`
+   in the socket, where nodeId and actuatorId are identifiers for the specific actuator.
+2. The server sends a "Actuator ON" message to all the connected clients, 
+   which is encoded as `ACTUATORON:nodeId:actuatorId`.
+
+### Turning an Actuator off
+
+When turning off an Actuator:
+
+1. The client sends a "Turn OFF Actuator" command, which is encoded as `off:nodeId:actuatorId`
+   in the socket, where nodeId and actuatorId are identifiers for the specific actuator.
+2. The server sends a "Actuator OFF" message to all the connected clients, 
+   which is encoded as `ACTUATOROFF:nodeId:actuatorId`.
+ 
 ### Error messages
 
 TODO - describe the possible error messages that nodes can send in your system.
