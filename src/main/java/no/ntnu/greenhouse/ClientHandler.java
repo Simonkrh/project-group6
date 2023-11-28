@@ -27,27 +27,30 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         Message response;
-        try {
-            while (!clientSocket.isClosed()) {
-                String clientRequest = this.socketReader.readLine();
-                Command clientCommand = processRequest(clientRequest);
-                if (clientCommand != null) {
-                    response = clientCommand.execute(this.greenhouseSimulator.getLogic());
-                    if (response != null) {
-                        this.sendResponseToClient(response);
-                    }
-                }
+        do {
+            String clientRequest = null;
+            try {
+                clientRequest = this.socketReader.readLine();
+            } catch (IOException e) {
+                System.err.println("Client request was not recieved: " + e.getMessage());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+            Command clientCommand = processRequest(clientRequest);
+            if (clientCommand != null) {
+                System.out.println("Client request was successfully received: " + clientCommand.getClass().getSimpleName());
+                response = clientCommand.execute(this.greenhouseSimulator.getLogic());
+                if (response != null) {
+                    this.sendResponseToClient(response);
+                }
+            } else {
+                response = null;
+            }
+        } while (response != null);
         Logger.info("Client " + this.clientSocket.getRemoteSocketAddress() + " leaving");
         this.greenhouseSimulator.disconnectClient(this);
     }
 
     private Command processRequest(String clientRequest) {
-        Message clientMessage = null;
+        Message clientMessage;
         clientMessage = MessageSerializer.fromString(clientRequest);
         if (!(clientMessage instanceof Command)) {
             if (clientMessage != null) {
