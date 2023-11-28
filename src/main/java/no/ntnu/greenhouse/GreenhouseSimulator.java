@@ -80,7 +80,7 @@ public class GreenhouseSimulator {
   }
 
   private void handleNewClients() {
-    while (this.serverSocket != null) {
+    while (this.serverSocket != null && !this.serverSocket.isClosed()) {
       ClientHandler clientHandler = this.acceptNextClientConnection(serverSocket);
       if (clientHandler != null) {
         this.connectedClients.add(clientHandler);
