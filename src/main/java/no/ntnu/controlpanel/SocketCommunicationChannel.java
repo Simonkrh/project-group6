@@ -2,8 +2,10 @@ package no.ntnu.controlpanel;
 
 import no.ntnu.tools.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
@@ -15,7 +17,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     private String serverHost = "localhost";
     private final ControlPanelLogic logic;
     private Socket socket;
-
+    private BufferedReader socketReader;
+    private PrintWriter socketWriter;
     /**
      * Creates a new socket communication channel.
      * 
@@ -29,7 +32,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public void sendActuatorChange(int nodeId, int actuatorId, boolean isOn) {
-        if(socket!= null && !socket.isClosed()){
+        if(socket!= null && socket.isConnected()){
             String change = "Actuator change " + nodeId + " " + actuatorId + (isOn ? "ON" : "OFF");
             try {
                 OutputStream out = socket.getOutputStream();
@@ -43,6 +46,12 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         else {
             Logger.error("Could not connect the socket");
         }
+    }
+
+    public void sendCommandToNodes(){
+    if(this.socketWriter == null && this.socketReader == null){
+
+    }
     }
 
     @Override
