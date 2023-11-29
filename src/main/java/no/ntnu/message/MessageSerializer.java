@@ -4,6 +4,7 @@ import no.ntnu.greenhouse.SensorReading;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static no.ntnu.tools.Parser.parseDoubleOrError;
 import static no.ntnu.tools.Parser.parseIntegerOrError;
@@ -18,6 +19,7 @@ public class MessageSerializer {
     public static final String ACTUATOR_STATE_ON_MESSAGE = "ACTUATOR_ON";
     public static final String ACTUATOR_STATE_OFF_MESSAGE = "ACTUATOR_OFF";
     public static final String SENSOR_DATA_ADVERTISEMENT = "SENSOR_DATA";
+    public static final String ERROR_MESSAGE = "e";
 
     /**
      * Creates a new instance of the MessageSerializer class.
@@ -47,6 +49,9 @@ public class MessageSerializer {
             message = parseCommandMessage(string);
         } else if (string.startsWith(SENSOR_DATA_ADVERTISEMENT)) {
             message = parseSensorDataAdvertisementMessage(string);
+        } else if (string.startsWith(ERROR_MESSAGE)) {
+            String errorMessage = string.substring(1);
+            message = new ErrorMessage(errorMessage);
         }
 
         return message;
@@ -158,7 +163,17 @@ public class MessageSerializer {
             string = TURN_OFF_ACTUATORS_COMMAND + ":" + turnOffActuatorCommand.getNodeId() + ":" + turnOffActuatorCommand.getActuatorId();
         } else if (message instanceof ActuatorStateMessage actuatorStateMessage) {
             string = actuatorStateMessage.isOn() ? ACTUATOR_STATE_ON_MESSAGE : ACTUATOR_STATE_OFF_MESSAGE;
+        } else if (message instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
+            return SENSOR_DATA_ADVERTISEMENT + ":" + sensorDataAdvertisementMessage.getNodeId() + ";" + sensorReadingsToString(sensorDataAdvertisementMessage.getSensorReadings());
+        } else if (message instanceof ErrorMessage errorMessage) {
+            string = ERROR_MESSAGE + errorMessage.getMessage();
         }
         return string;
+    }
+
+    private static String sensorReadingsToString(List<SensorReading> sensorReadings) {
+        return sensorReadings.stream()
+                .map(reading -> reading.getType() + "=" + reading.getValue() + " " + reading.getUnit())
+                .collect(Collectors.joining(","));
     }
 }

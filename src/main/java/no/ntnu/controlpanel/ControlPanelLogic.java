@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import no.ntnu.greenhouse.Actuator;
+import no.ntnu.greenhouse.GreenhouseSimulator;
 import no.ntnu.greenhouse.SensorReading;
 import no.ntnu.listeners.common.ActuatorListener;
 import no.ntnu.listeners.common.CommunicationChannelListener;
@@ -29,6 +30,7 @@ public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListe
 
   private CommunicationChannel communicationChannel;
   private CommunicationChannelListener communicationChannelListener;
+  private GreenhouseSimulator greenhouseSimulator;
 
   /**
    * Set the channel over which control commands will be sent to sensor/actuator nodes.
@@ -48,12 +50,40 @@ public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListe
     this.communicationChannelListener = listener;
   }
 
+  /**
+   * Set the greenhouse simulator instance used by the control panel.
+   *
+   * @param greenhouseSimulator The GreenhouseSimulator instance to be used.
+   */
+  public void setGreenhouseSimulator(GreenhouseSimulator greenhouseSimulator) {
+    this.greenhouseSimulator = greenhouseSimulator;
+  }
+
+  /**
+   * Get the communication channel instance associated with this control panel.
+   *
+   * @return The getCommunicationChannel instance.
+   */
   public CommunicationChannel getCommunicationChannel() {
     return this.communicationChannel;
   }
 
+  /**
+   * Get the communication channel listener instance associated with this control panel.
+   *
+   * @return The CommunicationChannelListener instance.
+   */
   public CommunicationChannelListener getCommunicationChannelListener() {
     return this.communicationChannelListener;
+  }
+
+  /**
+   * Get the greenhouse simulator instance associated with this control panel.
+   *
+   * @return The GreenhouseSimulator instance.
+   */
+  public GreenhouseSimulator getGreenhouseSimulator() {
+    return this.greenhouseSimulator;
   }
 
   public boolean isActuatorOn(int nodeId, int actuatorId) {

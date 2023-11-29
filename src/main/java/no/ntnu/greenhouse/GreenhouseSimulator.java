@@ -121,6 +121,15 @@ public class GreenhouseSimulator {
   }
 
   /**
+   * Returns a map of all sensor/actuator nodes within the greenhouse simulator.
+   *
+   * @return A map where the key is the node ID and the value is the SensorActuatorNode instance.
+   */
+  public Map<Integer, SensorActuatorNode> getNodesInfo() {
+    return new HashMap<>(nodes);
+  }
+
+  /**
    * Stop the simulation of the greenhouse - all the nodes in it.
    */
   public void stop() {
