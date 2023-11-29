@@ -11,6 +11,7 @@ import java.util.Map;
 
 import no.ntnu.controlpanel.ControlPanelLogic;
 import no.ntnu.listeners.greenhouse.NodeStateListener;
+import no.ntnu.message.Message;
 import no.ntnu.tools.Logger;
 
 /**
@@ -152,6 +153,12 @@ public class GreenhouseSimulator {
   public void subscribeToLifecycleUpdates(NodeStateListener listener) {
     for (SensorActuatorNode node : nodes.values()) {
       node.addStateListener(listener);
+    }
+  }
+
+  public void sendResponseToAllClients(Message message) {
+    for (ClientHandler clientHandler : this.connectedClients) {
+      clientHandler.sendResponseToClient(message);
     }
   }
 

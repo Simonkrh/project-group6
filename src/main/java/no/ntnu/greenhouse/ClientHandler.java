@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import no.ntnu.message.ActuatorStateMessage;
 import no.ntnu.message.Command;
 import no.ntnu.message.Message;
 import no.ntnu.message.MessageSerializer;
@@ -39,7 +40,7 @@ public class ClientHandler extends Thread {
                 System.out.println("Client request was successfully received: " + clientCommand.getClass().getSimpleName());
                 response = clientCommand.execute(this.greenhouseSimulator.getLogic());
                 if (response != null) {
-                    this.sendResponseToClient(response);
+                    this.sendResponse(response);
                 }
             } else {
                 response = null;
@@ -61,8 +62,24 @@ public class ClientHandler extends Thread {
         return (Command) clientMessage;
     }
 
-    private void sendResponseToClient(Message message) {
+    public void sendResponseToClient(Message message) {
         this.socketWriter.println(MessageSerializer.toString(message));
+    }
+
+    public void broadCastMessage(Message message) {
+        this.greenhouseSimulator.sendResponseToAllClients(message);
+    }
+
+    private boolean isBroadcastMessage(Message message) {
+        return message instanceof ActuatorStateMessage;
+    }
+
+    public void sendResponse(Message message) {
+        if (isBroadcastMessage(message)) {
+            broadCastMessage(message);
+        } else {
+            sendResponseToClient(message);
+        }
     }
 
     private void closeConnection() {
