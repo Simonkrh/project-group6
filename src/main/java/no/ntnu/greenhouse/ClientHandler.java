@@ -66,7 +66,7 @@ public class ClientHandler extends Thread {
         this.socketWriter.println(MessageSerializer.toString(message));
     }
 
-    public void broadCastMessage(Message message) {
+    public void broadCastResponse(Message message) {
         this.greenhouseSimulator.sendResponseToAllClients(message);
     }
 
@@ -76,7 +76,7 @@ public class ClientHandler extends Thread {
 
     public void sendResponse(Message message) {
         if (isBroadcastMessage(message)) {
-            broadCastMessage(message);
+            broadCastResponse(message);
         } else {
             sendResponseToClient(message);
         }
