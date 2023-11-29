@@ -87,7 +87,7 @@ When turning on an Actuator:
 1. The client sends a "Turn ON Actuator" command, which will be encoded as `on:nodeId:actuatorId`
    in the socket, where nodeId and actuatorId are identifiers for the specific actuator.
 2. The server sends a "Actuator ON" message to all the connected clients, 
-   which is encoded as `ACTUATORON:nodeId:actuatorId`.
+   which is encoded as `ACTUATOR_ON:nodeId:actuatorId`.
 
 ### Turning an Actuator off
 
@@ -96,8 +96,14 @@ When turning off an Actuator:
 1. The client sends a "Turn OFF Actuator" command, which is encoded as `off:nodeId:actuatorId`
    in the socket, where nodeId and actuatorId are identifiers for the specific actuator.
 2. The server sends a "Actuator OFF" message to all the connected clients, 
-   which is encoded as `ACTUATOROFF:nodeId:actuatorId`.
- 
+   which is encoded as `ACTUATOR_OFF:nodeId:actuatorId`.
+
+### Advertising Sensor Data
+
+When advertising sensor data:
+1. The node sends a "Sensor Data Advertisement" message, which is encoded as
+   `SENSOR_DATA:nodeId;sensorType1=value1 unit1,sensorType2=value2 unit2,...` in the socket.
+
 ### Error messages
 
 TODO - describe the possible error messages that nodes can send in your system.
