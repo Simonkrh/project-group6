@@ -1,10 +1,13 @@
 package no.ntnu.message;
 
+import no.ntnu.greenhouse.SensorActuatorNode;
 import no.ntnu.greenhouse.SensorReading;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static no.ntnu.tools.Parser.parseDoubleOrError;
 import static no.ntnu.tools.Parser.parseIntegerOrError;
@@ -16,10 +19,13 @@ import static no.ntnu.tools.Parser.parseIntegerOrError;
 public class MessageSerializer {
     public static final String TURN_ON_ACTUATORS_COMMAND = "on";
     public static final String TURN_OFF_ACTUATORS_COMMAND = "off";
+    public static final String REQUEST_NODE_INFO_COMMAND = "REQUEST_NODE_INFO";
     public static final String ACTUATOR_STATE_ON_MESSAGE = "ACTUATOR_ON";
     public static final String ACTUATOR_STATE_OFF_MESSAGE = "ACTUATOR_OFF";
-    public static final String SENSOR_DATA_ADVERTISEMENT = "SENSOR_DATA";
+    public static final String SENSOR_DATA_MESSAGE = "SENSOR_DATA";
+    public static final String NODE_INFO_MESSAGE = "NODE_INFO";
     public static final String ERROR_MESSAGE = "e";
+
 
     /**
      * Creates a new instance of the MessageSerializer class.
@@ -47,8 +53,10 @@ public class MessageSerializer {
                 string.startsWith(ACTUATOR_STATE_ON_MESSAGE) ||
                 string.startsWith(ACTUATOR_STATE_OFF_MESSAGE)) {
             message = parseCommandMessage(string);
-        } else if (string.startsWith(SENSOR_DATA_ADVERTISEMENT)) {
+        } else if (string.startsWith(SENSOR_DATA_MESSAGE)) {
             message = parseSensorDataAdvertisementMessage(string);
+        } else if (string.equals(REQUEST_NODE_INFO_COMMAND)) {
+            message = new RequestNodeInfoCommand();
         } else if (string.startsWith(ERROR_MESSAGE)) {
             String errorMessage = string.substring(1);
             message = new ErrorMessage(errorMessage);
@@ -164,8 +172,14 @@ public class MessageSerializer {
         } else if (message instanceof ActuatorStateMessage actuatorStateMessage) {
             string = actuatorStateMessage.isOn() ? ACTUATOR_STATE_ON_MESSAGE : ACTUATOR_STATE_OFF_MESSAGE;
         } else if (message instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
-            return SENSOR_DATA_ADVERTISEMENT + ":" + sensorDataAdvertisementMessage.getNodeId() + ";" + sensorReadingsToString(sensorDataAdvertisementMessage.getSensorReadings());
-        } else if (message instanceof ErrorMessage errorMessage) {
+            string = SENSOR_DATA_MESSAGE + ":" + sensorDataAdvertisementMessage.getNodeId() + ";" + sensorReadingsToString(sensorDataAdvertisementMessage.getSensorReadings());
+        } else if (message instanceof NodeInfoMessage nodeInfoMessage) {
+            Map<Integer, SensorActuatorNode> nodesInfo = nodeInfoMessage.getNodesInfo();
+            String nodesData = nodesInfo.entrySet().stream()
+                    .map(entry -> nodeInfoToString(entry.getKey(), entry.getValue()))
+                    .collect(Collectors.joining("|"));
+            string = NODE_INFO_MESSAGE + "|" + nodesData;
+        } else if (message instanceof ErrorMessage errorMessage)  {
             string = ERROR_MESSAGE + errorMessage.getMessage();
         }
         return string;
@@ -175,5 +189,20 @@ public class MessageSerializer {
         return sensorReadings.stream()
                 .map(reading -> reading.getType() + "=" + reading.getValue() + " " + reading.getUnit())
                 .collect(Collectors.joining(","));
+    }
+
+    private static String nodeInfoToString(Integer nodeId, SensorActuatorNode node) {
+        String sensorData = node.getSensors().stream()
+                .map(sensor -> {
+                    SensorReading reading = sensor.getReading();
+                    return reading.getType() + "=" + reading.getValue() + " " + reading.getUnit();
+                })
+                .collect(Collectors.joining(","));
+
+        String actuatorData = StreamSupport.stream(node.getActuators().spliterator(), false)
+                .map(actuator -> actuator.getType() + "=" + (actuator.isOn() ? "on" : "off"))
+                .collect(Collectors.joining(","));
+
+        return nodeId + ":" + sensorData + ":" + actuatorData;
     }
 }
