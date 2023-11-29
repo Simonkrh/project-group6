@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import no.ntnu.greenhouse.Actuator;
+import no.ntnu.greenhouse.GreenhouseSimulator;
 import no.ntnu.greenhouse.SensorReading;
 import no.ntnu.listeners.common.ActuatorListener;
 import no.ntnu.listeners.common.CommunicationChannelListener;
@@ -110,4 +111,14 @@ public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListe
       communicationChannelListener.onCommunicationChannelClosed();
     }
   }
+
+  /**
+   * Removes the node
+   * @param nodeId the node to be removed
+   */
+  public void removeNode(int nodeId) {
+    actuatorStates.remove(nodeId);
+    listeners.forEach(listener -> listener.onNodeRemoved(nodeId));
+  }
+
 }

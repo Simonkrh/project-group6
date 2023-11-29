@@ -4,10 +4,7 @@ import no.ntnu.message.Command;
 import no.ntnu.message.MessageSerializer;
 import no.ntnu.tools.Logger;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
@@ -16,7 +13,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class SocketCommunicationChannel implements CommunicationChannel {
     private final int PORT_NUMBER;
-    private String serverHost = "localhost";
+    private final String serverHost = "localhost";
     private final ControlPanelLogic logic;
     private Socket socket;
     private BufferedReader socketReader;
@@ -30,6 +27,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     public SocketCommunicationChannel(ControlPanelLogic logic, int portNumber) {
         this.logic = logic;
         this.PORT_NUMBER = portNumber;
+
     }
 
     @Override
@@ -59,7 +57,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             socketWriter.println(serializedCommand);
             return true;
         } catch (Exception e) {
-           Logger.error("Error occurred while sending a command: " + e.getMessage());
+           Logger.error("Error while trying to send the command : " + e.getMessage());
            return false;
         }
     }

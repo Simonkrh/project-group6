@@ -7,6 +7,8 @@ import no.ntnu.controlpanel.SocketCommunicationChannel;
 import no.ntnu.gui.controlpanel.ControlPanelApplication;
 import no.ntnu.tools.Logger;
 
+import java.io.IOException;
+
 /**
  * Starter class for the control panel.
  * Note: we could launch the Application class directly, but then we would have issues with the
@@ -45,7 +47,7 @@ public class ControlPanelStarter {
     stopCommunication();
   }
 
-  private CommunicationChannel initiateCommunication(ControlPanelLogic logic, boolean fake) {
+  private CommunicationChannel initiateCommunication(ControlPanelLogic logic, boolean fake)  {
     CommunicationChannel channel;
     if (fake) {
       channel = initiateFakeSpawner(logic);
@@ -55,7 +57,7 @@ public class ControlPanelStarter {
     return channel;
   }
 
-  private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic) {
+  private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic)  {
     // TODO - here you initiate TCP/UDP socket communication
     SocketCommunicationChannel channel = new SocketCommunicationChannel(logic, 10025);
     logic.setCommunicationChannel(channel);
