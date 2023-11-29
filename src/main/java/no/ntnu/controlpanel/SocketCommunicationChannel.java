@@ -1,5 +1,7 @@
 package no.ntnu.controlpanel;
 
+import no.ntnu.message.Command;
+import no.ntnu.message.MessageSerializer;
 import no.ntnu.tools.Logger;
 
 import java.io.BufferedReader;
@@ -48,11 +50,20 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         }
     }
 
-    public void sendCommandToNodes(){
-    if(this.socketWriter == null && this.socketReader == null){
+    public boolean sendCommand(Command command) {
+        if (socketWriter == null || socketReader == null) {
+            return false;
+        }
+        try {
+            String serializedCommand = MessageSerializer.toString(command);
+            socketWriter.println(serializedCommand);
+            return true;
+        } catch (Exception e) {
+           Logger.error("Error occurred while sending a command: " + e.getMessage());
+           return false;
+        }
+    }
 
-    }
-    }
 
     @Override
     public boolean open() {
