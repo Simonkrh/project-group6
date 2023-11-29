@@ -1,5 +1,6 @@
 package no.ntnu.controlpanel;
 
+import no.ntnu.greenhouse.Actuator;
 import no.ntnu.message.Command;
 import no.ntnu.message.MessageSerializer;
 import no.ntnu.tools.Logger;
