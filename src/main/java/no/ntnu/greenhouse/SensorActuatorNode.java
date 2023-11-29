@@ -291,15 +291,6 @@ public class SensorActuatorNode implements ActuatorListener, CommunicationChanne
   }
 
   /**
-   *
-   *
-   */
-  public void removeNode(){
-    stop();
-    notifyStateChanges(false);
-  }
-
-  /**
    * Set an actuator to a desired state.
    *
    * @param actuatorId ID of the actuator to set.

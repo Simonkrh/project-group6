@@ -165,8 +165,4 @@ public class GreenhouseSimulator {
   public boolean disconnectClient(ClientHandler clientHandler) {
     return this.connectedClients.remove(clientHandler);
   }
-
-
-
-
 }

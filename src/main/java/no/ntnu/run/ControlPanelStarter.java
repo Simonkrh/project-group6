@@ -7,8 +7,6 @@ import no.ntnu.controlpanel.SocketCommunicationChannel;
 import no.ntnu.gui.controlpanel.ControlPanelApplication;
 import no.ntnu.tools.Logger;
 
-import java.io.IOException;
-
 /**
  * Starter class for the control panel.
  * Note: we could launch the Application class directly, but then we would have issues with the

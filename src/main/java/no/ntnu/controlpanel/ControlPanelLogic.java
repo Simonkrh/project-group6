@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import no.ntnu.greenhouse.Actuator;
-import no.ntnu.greenhouse.GreenhouseSimulator;
 import no.ntnu.greenhouse.SensorReading;
 import no.ntnu.listeners.common.ActuatorListener;
 import no.ntnu.listeners.common.CommunicationChannelListener;

@@ -4,7 +4,10 @@ import no.ntnu.message.Command;
 import no.ntnu.message.MessageSerializer;
 import no.ntnu.tools.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
