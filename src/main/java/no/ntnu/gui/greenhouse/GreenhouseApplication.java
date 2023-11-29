@@ -53,6 +53,7 @@ public class GreenhouseApplication extends Application implements NodeStateListe
     Logger.info("Running greenhouse simulator with JavaFX GUI...");
     ControlPanelLogic logic = new ControlPanelLogic();
     simulator = new GreenhouseSimulator(fake, logic);
+    logic.setGreenhouseSimulator(simulator);
     launch();
   }
 
