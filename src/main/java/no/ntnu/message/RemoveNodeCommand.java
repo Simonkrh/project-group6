@@ -5,7 +5,7 @@ import no.ntnu.controlpanel.ControlPanelLogic;
 public class RemoveNodeCommand extends Command {
     private int nodeId;
 
-    public RemoveNodeCommand(){
+    public RemoveNodeCommand(int nodeId){
         this.nodeId = nodeId;
     }
     public Message execute(ControlPanelLogic logic) {
