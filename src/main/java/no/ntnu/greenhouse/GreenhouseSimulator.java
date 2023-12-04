@@ -165,6 +165,13 @@ public class GreenhouseSimulator {
     }
   }
 
+  /**
+   * Sends response to all connected clients.
+   * This method was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param message The message to be sent to all clients.
+   */
   public void sendResponseToAllClients(Message message) {
     for (ClientHandler clientHandler : this.connectedClients) {
       clientHandler.sendResponseToClient(message);
