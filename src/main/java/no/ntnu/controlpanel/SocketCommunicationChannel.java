@@ -46,7 +46,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     @Override
     public void sendActuatorChange(int nodeId, int actuatorId, boolean isOn) {
         if(socket!= null && socket.isConnected()){
-            socketWriter.println(isOn ? MessageSerializer.toString(new TurnOnActuatorCommand(nodeId, actuatorId)) : MessageSerializer.toString(new TurnOffActuatorCommand(nodeId, actuatorId)));
+            this.sendCommand(isOn ? new TurnOnActuatorCommand(nodeId, actuatorId) : new TurnOffActuatorCommand(nodeId, actuatorId));
         }
         else {
             Logger.error("Could not connect the socket");
