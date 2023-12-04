@@ -1,10 +1,12 @@
 package no.ntnu.controlpanel;
 
 import no.ntnu.greenhouse.Actuator;
+import no.ntnu.greenhouse.SensorReading;
 import no.ntnu.message.Command;
 import no.ntnu.message.MessageSerializer;
 import no.ntnu.tools.Logger;
 
+import static no.ntnu.tools.Parser.parseDoubleOrError;
 import static no.ntnu.tools.Parser.parseIntegerOrError;
 
 import java.io.BufferedReader;
@@ -14,6 +16,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -101,6 +105,35 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         info.addActuator(actuator);
     }
 
+    private List<SensorReading> createSensorReadingsFrom(String specification) {
+        String sensorInfo = specification.split(":")[1];
+        return parseSensors(sensorInfo);
+    }
+
+    private List<SensorReading> parseSensors(String sensorInfo) {
+        List<SensorReading> readings = new LinkedList<>();
+        String[] readingInfo = sensorInfo.split(",");
+        for (String reading : readingInfo) {
+            readings.add(parseReading(reading));
+        }
+        return readings;
+    }
+
+    private SensorReading parseReading(String reading) {
+        String[] assignmentParts = reading.split("=");
+        if (assignmentParts.length != 2) {
+            throw new IllegalArgumentException("Invalid sensor reading specified: " + reading);
+        }
+        String[] valueParts = assignmentParts[1].split(" ");
+        if (valueParts.length != 2) {
+            throw new IllegalArgumentException("Invalid sensor value/unit: " + reading);
+        }
+        String sensorType = assignmentParts[0];
+        double value = parseDoubleOrError(valueParts[0], "Invalid sensor value: " + valueParts[0]);
+        String unit = valueParts[1];
+        return new SensorReading(sensorType, value, unit);
+      }
+
   /**
    * Spawns new sensor/actuator nodes after a given delay.
    *
@@ -117,6 +150,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         }
         for (int i = 1; i < parts.length; i++) {
             SensorActuatorNodeInfo nodeInfo = createSensorNodeInfoFrom(parts[i]);
+            List<SensorReading> sensorReadings = createSensorReadingsFrom(parts[i]);
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -124,6 +158,12 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                     logic.onNodeAdded(nodeInfo);
                 }
             }, delay * 1000L);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    logic.onSensorData(nodeInfo.getId(), sensorReadings);
+                }
+            }, delay * 1000L + 1000);
         }
     }
 
