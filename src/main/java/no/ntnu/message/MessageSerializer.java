@@ -15,6 +15,9 @@ import static no.ntnu.tools.Parser.parseIntegerOrError;
 /**
  * Represents a serializer for messages to protocol-defined strings and vice
  * versa.
+ * <p>
+ * The message serializer has been developed and expanded out from the serializer used in the smart tv project by Girtz Strazdins.
+ * <a href="https://github.com/strazdinsg/datakomm-tools/tree/b00e972fb8be43f4ed7f702529f71858975785df/LiveCoding2023"></a>
  */
 public class MessageSerializer {
     public static final String TURN_ON_ACTUATORS_COMMAND = "on";

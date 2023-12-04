@@ -16,6 +16,9 @@ import no.ntnu.tools.Logger;
  * Represents the handler for a specific TCP client connection in a TCP-based greenhouse simulator.
  * This class extends {@link Thread} and handles communication with a single client,
  * processing incoming requests and sending responses accordingly.
+ *
+ * This class is made with a lot of inspiration from the smart TV server example made by Girts Strazdins.
+ * Link to this repository is <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
  */
 public class ClientHandler extends Thread {
     private Socket clientSocket;

@@ -37,6 +37,11 @@ public class GreenhouseSimulator {
     this.logic = logic;
   }
 
+  /**
+   * Get the control panel's logic.
+   *
+   * @return The instance of ControlPanelLogic.
+   */
   public ControlPanelLogic getLogic() {
     return this.logic;
   }
@@ -90,6 +95,14 @@ public class GreenhouseSimulator {
     }
   }
 
+  /**
+   * Accepts the next client connection.
+   * This code was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param listeningSocket the {@code ServerSocket} listening for the next client.
+   * @return the handler for the client.
+   */
   private ClientHandler acceptNextClientConnection(ServerSocket listeningSocket) {
       ClientHandler clientHandler = null;
       try {
@@ -165,12 +178,27 @@ public class GreenhouseSimulator {
     }
   }
 
+  /**
+   * Sends response to all connected clients.
+   * This method was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param message The message to be sent to all clients.
+   */
   public void sendResponseToAllClients(Message message) {
     for (ClientHandler clientHandler : this.connectedClients) {
       clientHandler.sendResponseToClient(message);
     }
   }
 
+  /**
+   * Disconnecta client from the server.
+   * his method was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param clientHandler the handler for the client to be removed.
+   * @return {@code true} if the client was removed.
+   */
   public boolean disconnectClient(ClientHandler clientHandler) {
     return this.connectedClients.remove(clientHandler);
   }
