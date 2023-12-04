@@ -104,6 +104,15 @@ When advertising sensor data:
 1. The node sends a "Sensor Data Advertisement" message, which is encoded as
    `SENSOR_DATA:nodeId;sensorType1=value1 unit1,sensorType2=value2 unit2,...` in the socket.
 
+### Requesting Node Information
+When requesting current information about all sensor and actuator nodes:
+1. The client sends a "Request node info" command, which is encoded `REQUEST_NODE_INFO` in
+   the socket.
+2. The server compiles information about each node, including sensor readings and actuator state.
+3. The server responds with a "Node Information" message, which is encoded as 
+   `NODE_INFO|nodeId1:sensorData:actuatorData|nodeId2:sensorData:actuatorData|...` in the socket. 
+
+
 ### Error messages
 
 When a request cannot be processed successfully, the server responds with an error message in the 
