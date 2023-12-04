@@ -90,6 +90,14 @@ public class GreenhouseSimulator {
     }
   }
 
+  /**
+   * Accepts the next client connection.
+   * This code was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param listeningSocket the {@code ServerSocket} listening for the next client.
+   * @return the handler for the client.
+   */
   private ClientHandler acceptNextClientConnection(ServerSocket listeningSocket) {
       ClientHandler clientHandler = null;
       try {
