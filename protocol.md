@@ -109,7 +109,7 @@ When advertising sensor data:
 When a request cannot be processed successfully, the server responds with an error message in the 
 format `eM`, where M is an error message - string continues until the newline. For instance, 
 if attempting to turn on an actuator when it is already on, the error message will be 
-"Actuator already on" and the response will be "e:Actuator already on". 
+"Actuator already on" and the response will be "eActuator already on". 
 
 
 ## An example scenario
