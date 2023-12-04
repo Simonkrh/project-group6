@@ -37,6 +37,11 @@ public class GreenhouseSimulator {
     this.logic = logic;
   }
 
+  /**
+   * Get the control panel's logic.
+   *
+   * @return The instance of ControlPanelLogic.
+   */
   public ControlPanelLogic getLogic() {
     return this.logic;
   }
@@ -186,6 +191,14 @@ public class GreenhouseSimulator {
     }
   }
 
+  /**
+   * Disconnecta client from the server.
+   * his method was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param clientHandler the handler for the client to be removed.
+   * @return {@code true} if the client was removed.
+   */
   public boolean disconnectClient(ClientHandler clientHandler) {
     return this.connectedClients.remove(clientHandler);
   }
