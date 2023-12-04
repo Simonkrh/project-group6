@@ -4,6 +4,8 @@ import no.ntnu.greenhouse.Actuator;
 import no.ntnu.greenhouse.SensorReading;
 import no.ntnu.message.Command;
 import no.ntnu.message.MessageSerializer;
+import no.ntnu.message.TurnOffActuatorCommand;
+import no.ntnu.message.TurnOnActuatorCommand;
 import no.ntnu.tools.Logger;
 
 import static no.ntnu.tools.Parser.parseDoubleOrError;
@@ -12,10 +14,8 @@ import static no.ntnu.tools.Parser.parseIntegerOrError;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Timer;
@@ -46,15 +46,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     @Override
     public void sendActuatorChange(int nodeId, int actuatorId, boolean isOn) {
         if(socket!= null && socket.isConnected()){
-            String change = "Actuator change " + nodeId + " " + actuatorId + (isOn ? "ON" : "OFF");
-            try {
-                OutputStream out = socket.getOutputStream();
-                byte [] bytes = change.getBytes(StandardCharsets.UTF_8);
-                out.write(bytes);
-                Logger.info("The change is " + change);
-            } catch (IOException e) {
-               Logger.error("Could not send the change ");
-            }
+            socketWriter.println(isOn ? MessageSerializer.toString(new TurnOnActuatorCommand(nodeId, actuatorId)) : MessageSerializer.toString(new TurnOffActuatorCommand(nodeId, actuatorId)));
         }
         else {
             Logger.error("Could not connect the socket");
