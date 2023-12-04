@@ -12,12 +12,24 @@ import no.ntnu.message.Message;
 import no.ntnu.message.MessageSerializer;
 import no.ntnu.tools.Logger;
 
+/**
+ * Represents the handler for a specific TCP client connection in a TCP-based greenhouse simulator.
+ * This class extends {@link Thread} and handles communication with a single client,
+ * processing incoming requests and sending responses accordingly.
+ */
 public class ClientHandler extends Thread {
     private Socket clientSocket;
     private GreenhouseSimulator greenhouseSimulator;
     private BufferedReader socketReader;
     private PrintWriter socketWriter;
 
+    /**
+     * Creates a new instance for the ClientHandler call.
+     *
+     * @param socket The socket associated with the client connection.
+     * @param greenhouseSimulator The TCP server class which this handler is part of.
+     * @throws IOException If an error occurs while trying to establish the input or the output streams.
+     */
     public ClientHandler(Socket socket, GreenhouseSimulator greenhouseSimulator) throws IOException {
         this.greenhouseSimulator = greenhouseSimulator;
         this.clientSocket = socket;
@@ -25,6 +37,10 @@ public class ClientHandler extends Thread {
         this.socketWriter = new PrintWriter(socket.getOutputStream(), true);
     }
 
+    /**
+     * Runs the logic for client handling. Continuously listens for client requests,
+     * processes them, and sends back responses until the connection is terminated.
+     */
     @Override
     public void run() {
         Message response;
@@ -50,6 +66,12 @@ public class ClientHandler extends Thread {
         this.closeConnection();
     }
 
+    /**
+     * Processes a client request by deserializing the message and casting it to a command if valid.
+     *
+     * @param clientRequest The request received from the client before it is processed.
+     * @return a Command object if the request is valid, null if not.
+     */
     private Command processRequest(String clientRequest) {
         Message clientMessage;
         clientMessage = MessageSerializer.fromString(clientRequest);
@@ -62,18 +84,40 @@ public class ClientHandler extends Thread {
         return (Command) clientMessage;
     }
 
+    /**
+     * Sends response (message) to client.
+     *
+     * @param message The message to be sent.
+     */
     public void sendResponseToClient(Message message) {
         this.socketWriter.println(MessageSerializer.toString(message));
     }
 
+    /**
+     * Broadcasts message to all connected clients.
+     *
+     * @param message The message to be broadcast.
+     */
     public void broadCastResponse(Message message) {
         this.greenhouseSimulator.sendResponseToAllClients(message);
     }
 
+    /**
+     * Determines if the given message is of a type that should be broadcast.
+     *
+     * @param message The message to check if it should be broadcast.
+     * @return true if the message should be broadcast, false if not
+     */
     private boolean isBroadcastMessage(Message message) {
         return message instanceof ActuatorStateMessage;
     }
 
+    /**
+     * Sends a response to either a single client or broadcast it to all clients,
+     * based on the message type.
+     *
+     * @param message The message to be sent as a response.
+     */
     public void sendResponse(Message message) {
         if (isBroadcastMessage(message)) {
             broadCastResponse(message);
@@ -82,6 +126,9 @@ public class ClientHandler extends Thread {
         }
     }
 
+    /**
+     * Closes the connection as well as used resources and notifies the server.
+     */
     private void closeConnection() {
         try {
             if (this.socketReader != null) {
