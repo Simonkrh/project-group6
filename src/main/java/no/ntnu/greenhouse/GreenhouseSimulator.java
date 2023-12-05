@@ -116,7 +116,6 @@ public class GreenhouseSimulator {
     }
 
   private void initiateRealCommunication() {
-  // TODO - here you can set up the TCP or UDP communication
     int port = 10025;
     try {
       serverSocket = new ServerSocket(port);
@@ -158,7 +157,6 @@ public class GreenhouseSimulator {
         periodicSwitch.stop();
       }
     } else {
-      // TODO - here you stop the TCP/UDP communication
       try {
         this.serverSocket.close();
       } catch (IOException e) {

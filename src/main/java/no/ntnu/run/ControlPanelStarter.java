@@ -56,11 +56,8 @@ public class ControlPanelStarter {
   }
 
   private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic)  {
-    // TODO - here you initiate TCP/UDP socket communication
     SocketCommunicationChannel channel = new SocketCommunicationChannel(logic, 10025);
     logic.setCommunicationChannel(channel);
-    // You communication class(es) may want to get reference to the logic and call necessary
-    // logic methods when events happen (for example, when sensor data is received)
     return channel;
   }
 
