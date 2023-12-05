@@ -2,7 +2,9 @@ package no.ntnu.controlpanel;
 
 import no.ntnu.greenhouse.Actuator;
 import no.ntnu.greenhouse.SensorReading;
+import no.ntnu.message.ActuatorStateMessage;
 import no.ntnu.message.Command;
+import no.ntnu.message.Message;
 import no.ntnu.message.MessageSerializer;
 import no.ntnu.message.TurnOffActuatorCommand;
 import no.ntnu.message.TurnOnActuatorCommand;
@@ -175,6 +177,27 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         this.spawnNodes(response, 0);
     }
 
+    private void listenForResponse() {
+        while (this.socket != null && !this.socket.isClosed()) {
+            String response = null;
+            try {
+                response = socketReader.readLine();
+            } catch (IOException e) {
+                Logger.error(e.getMessage());
+            }
+            if (response != null && !response.isBlank()) {
+                this.processResponse(response);
+            }
+        }
+    }
+
+    private void processResponse(String response) {
+        Message serializedResponse = MessageSerializer.fromString(response);
+        if (serializedResponse instanceof ActuatorStateMessage actuatorStateMessage) {
+            this.logic.onActuatorStateChanged(actuatorStateMessage.getNodeId(), actuatorStateMessage.getActuatorId(), actuatorStateMessage.isOn());
+        }
+    }
+
     @Override
     public boolean open() {
         boolean isOpen = false;
@@ -183,6 +206,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             this.socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.socketWriter = new PrintWriter(socket.getOutputStream(), true);
             this.fetchNodeData();
+            new Thread(() -> listenForResponse()).start();
             isOpen = true;
         } catch (IOException err) {
             System.err.println("Could not open server socket: " + err.getMessage());

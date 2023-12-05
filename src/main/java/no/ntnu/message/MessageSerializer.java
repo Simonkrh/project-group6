@@ -173,7 +173,7 @@ public class MessageSerializer {
         } else if (message instanceof TurnOffActuatorCommand turnOffActuatorCommand) {
             string = TURN_OFF_ACTUATORS_COMMAND + ":" + turnOffActuatorCommand.getNodeId() + ":" + turnOffActuatorCommand.getActuatorId();
         } else if (message instanceof ActuatorStateMessage actuatorStateMessage) {
-            string = actuatorStateMessage.isOn() ? ACTUATOR_STATE_ON_MESSAGE : ACTUATOR_STATE_OFF_MESSAGE;
+            string = (actuatorStateMessage.isOn() ? ACTUATOR_STATE_ON_MESSAGE : ACTUATOR_STATE_OFF_MESSAGE) +  ":" + actuatorStateMessage.getNodeId() + ":" + actuatorStateMessage.getActuatorId();
         } else if (message instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
             string = SENSOR_DATA_MESSAGE + ":" + sensorDataAdvertisementMessage.getNodeId() + ";" + sensorReadingsToString(sensorDataAdvertisementMessage.getSensorReadings());
         } else if (message instanceof NodeInfoMessage nodeInfoMessage) {
