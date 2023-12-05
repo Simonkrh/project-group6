@@ -25,6 +25,7 @@ public class TurnOnActuatorCommand extends Command {
     public Message execute(ControlPanelLogic logic) {
         try {
             logic.onActuatorStateChanged(nodeId, actuatorId, true);
+            logic.getGreenhouseSimulator().changeActuatorState(nodeId, actuatorId, true);
             return new ActuatorStateMessage(nodeId, actuatorId, logic.isActuatorOn(nodeId, actuatorId));
         } catch (Exception err) {
             return new ErrorMessage(err.getMessage());

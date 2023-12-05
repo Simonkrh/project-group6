@@ -202,4 +202,15 @@ public class GreenhouseSimulator {
   public boolean disconnectClient(ClientHandler clientHandler) {
     return this.connectedClients.remove(clientHandler);
   }
+
+  /**
+   * Changes the state of an actuator to a specific state.
+   * 
+   * @param nodeId the id of the node that contains the actuator.
+   * @param actuatorId the id of the actuator.
+   * @param state the state to change the actuator to.
+   */
+  public void changeActuatorState(int nodeId, int actuatorId, boolean state) {
+    this.getNodesInfo().get(nodeId).getActuators().get(actuatorId).set(state);
+  }
 }

@@ -203,7 +203,7 @@ public class MessageSerializer {
                 .collect(Collectors.joining(","));
 
         String actuatorData = StreamSupport.stream(node.getActuators().spliterator(), false)
-                .map(actuator -> actuator.getType() + "=" + (actuator.isOn() ? "on" : "off"))
+                .map(actuator -> actuator.getId() + "_" + actuator.getType() + "=" + (actuator.isOn() ? "on" : "off"))
                 .collect(Collectors.joining(","));
 
         return nodeId + ":" + sensorData + ":" + actuatorData;

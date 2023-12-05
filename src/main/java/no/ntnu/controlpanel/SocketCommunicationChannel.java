@@ -85,13 +85,18 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     }
 
     private void parseActuatorInfo(String s, SensorActuatorNodeInfo info) {
-        String[] actuatorInfo = s.split("=");
-        if (actuatorInfo.length != 2) {
+        String[] actuatorParts = s.split("=");
+        if (actuatorParts.length != 2) {
             throw new IllegalArgumentException("Invalid actuator info format: " + s);
         }
-        String actuatorType = actuatorInfo[0];
-        boolean activated = actuatorInfo[1] == "on";
-        Actuator actuator = new Actuator(actuatorType, info.getId());
+        String[] actuatorInfo = actuatorParts[0].split("_");
+        if (actuatorInfo.length != 2) {
+            throw new IllegalArgumentException("Invalid actuator info format: " + actuatorParts[0]);
+        }
+        int actuatorId = parseIntegerOrError(actuatorInfo[0], "Invalid node ID:" + actuatorInfo[0]);
+        String actuatorType = actuatorParts[1];
+        boolean activated = actuatorParts[1] == "on";
+        Actuator actuator = new Actuator(actuatorId, actuatorType, info.getId());
         actuator.set(activated);
         actuator.setListener(logic);
         info.addActuator(actuator);
