@@ -5,6 +5,7 @@ import java.util.Map;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import no.ntnu.controlpanel.ControlPanelLogic;
 import no.ntnu.greenhouse.GreenhouseSimulator;
 import no.ntnu.greenhouse.SensorActuatorNode;
 import no.ntnu.listeners.greenhouse.NodeStateListener;
@@ -50,7 +51,9 @@ public class GreenhouseApplication extends Application implements NodeStateListe
    */
   public static void startApp(boolean fake) {
     Logger.info("Running greenhouse simulator with JavaFX GUI...");
-    simulator = new GreenhouseSimulator(fake);
+    ControlPanelLogic logic = new ControlPanelLogic();
+    simulator = new GreenhouseSimulator(fake, logic);
+    logic.setGreenhouseSimulator(simulator);
     launch();
   }
 
@@ -69,6 +72,7 @@ public class GreenhouseApplication extends Application implements NodeStateListe
       Platform.runLater(window::close);
       if (nodeWindows.isEmpty()) {
         Platform.runLater(mainStage::close);
+        this.closeApplication();
       }
     }
   }

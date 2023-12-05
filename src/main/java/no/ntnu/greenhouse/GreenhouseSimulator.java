@@ -2,11 +2,16 @@ package no.ntnu.greenhouse;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import no.ntnu.controlpanel.ControlPanelLogic;
 import no.ntnu.listeners.greenhouse.NodeStateListener;
+import no.ntnu.message.Message;
 import no.ntnu.tools.Logger;
 
 /**
@@ -16,8 +21,10 @@ public class GreenhouseSimulator {
   private final Map<Integer, SensorActuatorNode> nodes = new HashMap<>();
 
   private final List<PeriodicSwitch> periodicSwitches = new LinkedList<>();
+  private List<ClientHandler> connectedClients = new ArrayList<>();
   private final boolean fake;
   private ServerSocket serverSocket;
+  private ControlPanelLogic logic;
 
   /**
    * Create a greenhouse simulator.
@@ -25,8 +32,18 @@ public class GreenhouseSimulator {
    * @param fake When true, simulate a fake periodic events instead of creating
    *             socket communication
    */
-  public GreenhouseSimulator(boolean fake) {
+  public GreenhouseSimulator(boolean fake, ControlPanelLogic logic) {
     this.fake = fake;
+    this.logic = logic;
+  }
+
+  /**
+   * Get the control panel's logic.
+   *
+   * @return The instance of ControlPanelLogic.
+   */
+  public ControlPanelLogic getLogic() {
+    return this.logic;
   }
 
   /**
@@ -68,12 +85,42 @@ public class GreenhouseSimulator {
     }
   }
 
+  private void handleNewClients() {
+    while (this.serverSocket != null && !this.serverSocket.isClosed()) {
+      ClientHandler clientHandler = this.acceptNextClientConnection(serverSocket);
+      if (clientHandler != null) {
+        this.connectedClients.add(clientHandler);
+        clientHandler.start();
+      }
+    }
+  }
 
-private void initiateRealCommunication() {
+  /**
+   * Accepts the next client connection.
+   * This code was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param listeningSocket the {@code ServerSocket} listening for the next client.
+   * @return the handler for the client.
+   */
+  private ClientHandler acceptNextClientConnection(ServerSocket listeningSocket) {
+      ClientHandler clientHandler = null;
+      try {
+        Socket clientSocket = listeningSocket.accept();
+        Logger.info("New client connected from " + clientSocket.getRemoteSocketAddress());
+        clientHandler = new ClientHandler(clientSocket, this);
+      } catch (IOException err) {
+        Logger.error("Could not accept client connection: " + err.getMessage());
+      }
+      return clientHandler;
+    }
+
+  private void initiateRealCommunication() {
   // TODO - here you can set up the TCP or UDP communication
     int port = 10025;
     try {
       serverSocket = new ServerSocket(port);
+      new Thread(() -> handleNewClients()).start();
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException(e);
@@ -84,6 +131,15 @@ private void initiateRealCommunication() {
   private void initiateFakePeriodicSwitches() {
     periodicSwitches.add(new PeriodicSwitch("Window DJ", nodes.get(1), 2, 20000));
     periodicSwitches.add(new PeriodicSwitch("Heater DJ", nodes.get(2), 7, 8000));
+  }
+
+  /**
+   * Returns a map of all sensor/actuator nodes within the greenhouse simulator.
+   *
+   * @return A map where the key is the node ID and the value is the SensorActuatorNode instance.
+   */
+  public Map<Integer, SensorActuatorNode> getNodesInfo() {
+    return new HashMap<>(nodes);
   }
 
   /**
@@ -120,5 +176,41 @@ private void initiateRealCommunication() {
     for (SensorActuatorNode node : nodes.values()) {
       node.addStateListener(listener);
     }
+  }
+
+  /**
+   * Sends response to all connected clients.
+   * This method was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param message The message to be sent to all clients.
+   */
+  public void sendResponseToAllClients(Message message) {
+    for (ClientHandler clientHandler : this.connectedClients) {
+      clientHandler.sendResponseToClient(message);
+    }
+  }
+
+  /**
+   * Disconnecta client from the server.
+   * his method was implemented from Girts Strazdins smart-tv example from:
+   * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+   *
+   * @param clientHandler the handler for the client to be removed.
+   * @return {@code true} if the client was removed.
+   */
+  public boolean disconnectClient(ClientHandler clientHandler) {
+    return this.connectedClients.remove(clientHandler);
+  }
+
+  /**
+   * Changes the state of an actuator to a specific state.
+   * 
+   * @param nodeId the id of the node that contains the actuator.
+   * @param actuatorId the id of the actuator.
+   * @param state the state to change the actuator to.
+   */
+  public void changeActuatorState(int nodeId, int actuatorId, boolean state) {
+    this.getNodesInfo().get(nodeId).getActuators().get(actuatorId).set(state);
   }
 }

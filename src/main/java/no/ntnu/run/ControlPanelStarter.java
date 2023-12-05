@@ -45,7 +45,7 @@ public class ControlPanelStarter {
     stopCommunication();
   }
 
-  private CommunicationChannel initiateCommunication(ControlPanelLogic logic, boolean fake) {
+  private CommunicationChannel initiateCommunication(ControlPanelLogic logic, boolean fake)  {
     CommunicationChannel channel;
     if (fake) {
       channel = initiateFakeSpawner(logic);
@@ -55,7 +55,7 @@ public class ControlPanelStarter {
     return channel;
   }
 
-  private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic) {
+  private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic)  {
     // TODO - here you initiate TCP/UDP socket communication
     SocketCommunicationChannel channel = new SocketCommunicationChannel(logic, 10025);
     logic.setCommunicationChannel(channel);
@@ -92,9 +92,11 @@ public class ControlPanelStarter {
   }
 
   private void stopCommunication() {
-    // TODO - here you stop the TCP/UDP socket communication
-    SocketCommunicationChannel socketChannel = (SocketCommunicationChannel) channel;
-    socketChannel.close();
-    Logger.info("Socket communication channel closed.");
+    if (channel instanceof SocketCommunicationChannel) {
+      SocketCommunicationChannel socketChannel = (SocketCommunicationChannel) channel;
+      socketChannel.close();
+      Logger.info("Socket communication channel closed.");
+    }
   }
+
 }
