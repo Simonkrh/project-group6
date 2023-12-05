@@ -94,8 +94,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             throw new IllegalArgumentException("Invalid actuator info format: " + actuatorParts[0]);
         }
         int actuatorId = parseIntegerOrError(actuatorInfo[0], "Invalid node ID:" + actuatorInfo[0]);
-        String actuatorType = actuatorParts[1];
-        boolean activated = actuatorParts[1] == "on";
+        String actuatorType = actuatorInfo[1];
+        boolean activated = actuatorParts[1].equals("on");
         Actuator actuator = new Actuator(actuatorId, actuatorType, info.getId());
         actuator.set(activated);
         actuator.setListener(logic);
