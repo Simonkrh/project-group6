@@ -1,5 +1,6 @@
 package no.ntnu.run;
 
+import no.ntnu.controlpanel.ControlPanelLogic;
 import no.ntnu.greenhouse.GreenhouseSimulator;
 import no.ntnu.tools.Logger;
 
@@ -21,7 +22,8 @@ public class CommandLineGreenhouse {
       fake = true;
       Logger.info("Using FAKE events");
     }
-    GreenhouseSimulator simulator = new GreenhouseSimulator(fake);
+    ControlPanelLogic logic = new ControlPanelLogic();
+    GreenhouseSimulator simulator = new GreenhouseSimulator(fake, logic);
     simulator.initialize();
     simulator.start();
   }

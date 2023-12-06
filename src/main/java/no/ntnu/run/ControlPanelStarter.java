@@ -7,7 +7,6 @@ import no.ntnu.controlpanel.SocketCommunicationChannel;
 import no.ntnu.gui.controlpanel.ControlPanelApplication;
 import no.ntnu.tools.Logger;
 
-
 /**
  * Starter class for the control panel.
  * Note: we could launch the Application class directly, but then we would have issues with the
@@ -46,7 +45,7 @@ public class ControlPanelStarter {
     stopCommunication();
   }
 
-  private CommunicationChannel initiateCommunication(ControlPanelLogic logic, boolean fake) {
+  private CommunicationChannel initiateCommunication(ControlPanelLogic logic, boolean fake)  {
     CommunicationChannel channel;
     if (fake) {
       channel = initiateFakeSpawner(logic);
@@ -56,12 +55,9 @@ public class ControlPanelStarter {
     return channel;
   }
 
-  private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic) {
-    // TODO - here you initiate TCP/UDP socket communication
-    SocketCommunicationChannel channel = new SocketCommunicationChannel(logic,);
+  private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic)  {
+    SocketCommunicationChannel channel = new SocketCommunicationChannel(logic, 10025);
     logic.setCommunicationChannel(channel);
-    // You communication class(es) may want to get reference to the logic and call necessary
-    // logic methods when events happen (for example, when sensor data is received)
     return channel;
   }
 
@@ -93,9 +89,11 @@ public class ControlPanelStarter {
   }
 
   private void stopCommunication() {
-    // TODO - here you stop the TCP/UDP socket communication
-    SocketCommunicationChannel socketChannel = (SocketCommunicationChannel) channel;
-    socketChannel.close();
-    Logger.info("Socket communication channel closed.");
+    if (channel instanceof SocketCommunicationChannel) {
+      SocketCommunicationChannel socketChannel = (SocketCommunicationChannel) channel;
+      socketChannel.close();
+      Logger.info("Socket communication channel closed.");
+    }
   }
+
 }
