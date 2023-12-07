@@ -163,6 +163,7 @@ public class ControlPanelApplication extends Application implements GreenhouseEv
     private void removeNodeTab(int nodeId, Tab nodeTab) {
         nodeTab.getTabPane().getTabs().remove(nodeTab);
         nodeTabs.remove(nodeId);
+        Logger.info("Node " + nodeId + " removed");
     }
 
     private void addNodeTab(SensorActuatorNodeInfo nodeInfo) {

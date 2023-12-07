@@ -10,7 +10,7 @@ public class RemoveNodeCommand extends Command {
     }
 
     public Message execute(ControlPanelLogic logic) {
-        logic.removeNode(nodeId);
+        //logic.removeNode(nodeId);
         return new NodeRemovedMessage(nodeId);
     }
 }

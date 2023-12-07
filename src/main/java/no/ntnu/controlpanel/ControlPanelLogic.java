@@ -111,46 +111,27 @@ public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListe
         listeners.forEach(listener -> listener.onNodeAdded(nodeInfo));
     }
 
-    /**
-     * Notifies listeners when a node has been removed.
-     *
-     * @param nodeId ID of the node which has disappeared (removed)
-     */
+
     @Override
     public void onNodeRemoved(int nodeId) {
         listeners.forEach(listener -> listener.onNodeRemoved(nodeId));
+        Logger.info("Node " + nodeId + " is removed");
     }
 
-    /**
-     * Notifies listeners when sensor data is received from a node.
-     *
-     * @param nodeId  ID of the node sending sensor data
-     * @param sensors List of SensorReading objects containing sensor data
-     */
+
     @Override
     public void onSensorData(int nodeId, List<SensorReading> sensors) {
         listeners.forEach(listener -> listener.onSensorData(nodeId, sensors));
     }
 
-    /**
-     * Notifies listeners when the state of an actuator changes on a node.
-     *
-     * @param nodeId     ID of the node with the actuator
-     * @param actuatorId ID of the actuator whose state changed
-     * @param isOn       New state of the actuator (true if on, false if off)
-     */
+
     @Override
     public void onActuatorStateChanged(int nodeId, int actuatorId, boolean isOn) {
         actuatorStates.computeIfAbsent(nodeId, k -> new HashMap<>()).put(actuatorId, isOn);
         listeners.forEach(listener -> listener.onActuatorStateChanged(nodeId, actuatorId, isOn));
     }
 
-    /**
-     * Notifies listeners when an actuator is updated.
-     *
-     * @param nodeId   ID of the node with the updated actuator
-     * @param actuator Updated Actuator object
-     */
+
     @Override
     public void actuatorUpdated(int nodeId, Actuator actuator) {
         if (communicationChannel != null) {
@@ -159,9 +140,7 @@ public class ControlPanelLogic implements GreenhouseEventListener, ActuatorListe
         listeners.forEach(listener -> listener.onActuatorStateChanged(nodeId, actuator.getId(), actuator.isOn()));
     }
 
-    /**
-     * Notifies listeners when the communication channel is closed.
-     */
+
     @Override
     public void onCommunicationChannelClosed() {
         Logger.info("Communication closed, updating logic...");
