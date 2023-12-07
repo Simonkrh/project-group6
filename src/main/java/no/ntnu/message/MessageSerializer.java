@@ -124,6 +124,7 @@ public class MessageSerializer {
             throw new IllegalArgumentException("Sensor specification can't be empty");
         }
 
+        string = string.split(":")[1];
         String[] parts = string.split(";");
         if (parts.length != 2) {
             throw new IllegalArgumentException("Incorrect specification format: " + string);

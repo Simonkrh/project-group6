@@ -6,6 +6,7 @@ import no.ntnu.message.ActuatorStateMessage;
 import no.ntnu.message.Command;
 import no.ntnu.message.Message;
 import no.ntnu.message.MessageSerializer;
+import no.ntnu.message.SensorDataAdvertisementMessage;
 import no.ntnu.message.TurnOffActuatorCommand;
 import no.ntnu.message.TurnOnActuatorCommand;
 import no.ntnu.tools.Logger;
@@ -195,6 +196,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         Message serializedResponse = MessageSerializer.fromString(response);
         if (serializedResponse instanceof ActuatorStateMessage actuatorStateMessage) {
             this.logic.onActuatorStateChanged(actuatorStateMessage.getNodeId(), actuatorStateMessage.getActuatorId(), actuatorStateMessage.isOn());
+        } else if (serializedResponse instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
+            this.logic.onSensorData(sensorDataAdvertisementMessage.getNodeId(), sensorDataAdvertisementMessage.getSensorReadings());
         }
     }
 
