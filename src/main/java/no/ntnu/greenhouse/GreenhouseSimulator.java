@@ -221,7 +221,7 @@ public class GreenhouseSimulator {
   }
 
   /**
-   * Disconnecta client from the server.
+   * Disconnect a client from the server.
    * his method was implemented from Girts Strazdins smart-tv example from:
    * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
    *
