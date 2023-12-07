@@ -65,8 +65,9 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     /**
      * Send command to the clients
+     * 
      * @param command the command to be sent
-     * @return true if succesfully returned flase if not
+     * @return true if successfully returned false if not
      */
     public boolean sendCommand(Command command) {
         if (socketWriter == null || socketReader == null) {
