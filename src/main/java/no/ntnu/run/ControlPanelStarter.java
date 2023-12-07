@@ -57,7 +57,7 @@ public class ControlPanelStarter {
     }
 
     private CommunicationChannel initiateSocketCommunication(ControlPanelLogic logic) {
-        SocketCommunicationChannel channel = new SocketCommunicationChannel(logic, 10025);
+        SocketCommunicationChannel channel = new SocketCommunicationChannel(logic);
         logic.setCommunicationChannel(channel);
         return channel;
     }

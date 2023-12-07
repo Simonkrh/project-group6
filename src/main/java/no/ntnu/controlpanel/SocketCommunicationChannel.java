@@ -29,7 +29,7 @@ import java.util.TimerTask;
  * A socket communication channel.
  */
 public class SocketCommunicationChannel implements CommunicationChannel {
-    private final int PORT_NUMBER;
+    private final int PORT_NUMBER = 10025;
     private final String serverHost = "localhost";
     private final ControlPanelLogic logic;
     private Socket socket;
@@ -40,12 +40,9 @@ public class SocketCommunicationChannel implements CommunicationChannel {
      * Creates a new socket communication channel.
      * 
      * @param logic      The application logic of the control panel node.
-     * @param portNumber The port number for the socket.
      */
-    public SocketCommunicationChannel(ControlPanelLogic logic, int portNumber) {
+    public SocketCommunicationChannel(ControlPanelLogic logic) {
         this.logic = logic;
-        this.PORT_NUMBER = portNumber;
-
     }
 
     @Override

@@ -22,6 +22,8 @@ import no.ntnu.tools.Logger;
  * Application entrypoint - a simulator for a greenhouse.
  */
 public class GreenhouseSimulator {
+    private final int PORT_NUMBER = 10025;
+
     private final Map<Integer, SensorActuatorNode> nodes = new HashMap<>();
 
     private final List<PeriodicSwitch> periodicSwitches = new LinkedList<>();
@@ -149,9 +151,8 @@ public class GreenhouseSimulator {
     }
 
     private void initiateRealCommunication() {
-        int port = 10025;
         try {
-            serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(PORT_NUMBER);
             new Thread(() -> handleNewClients()).start();
             new Thread(() -> sendSensorDataPeriodically()).start();
         } catch (IOException e) {
