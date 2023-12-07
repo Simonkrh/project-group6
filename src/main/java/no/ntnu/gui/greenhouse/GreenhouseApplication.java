@@ -69,6 +69,7 @@ public class GreenhouseApplication extends Application implements NodeStateListe
     @Override
     public void onNodeStopped(SensorActuatorNode node) {
         NodeGuiWindow window = nodeWindows.remove(node);
+        GreenhouseApplication.simulator.removeNode(node);
         if (window != null) {
             Platform.runLater(window::close);
             if (nodeWindows.isEmpty()) {

@@ -29,6 +29,7 @@ public class MessageSerializer {
     public static final String ACTUATOR_STATE_OFF_MESSAGE = "ACTUATOR_OFF";
     public static final String SENSOR_DATA_MESSAGE = "SENSOR_DATA";
     public static final String NODE_INFO_MESSAGE = "NODE_INFO";
+    public static final String REMOVE_NODE_MESSAGE = "REMOVE_NODE";
     public static final String ERROR_MESSAGE = "e";
 
     /**
@@ -61,10 +62,24 @@ public class MessageSerializer {
             message = parseSensorDataAdvertisementMessage(string);
         } else if (string.equals(REQUEST_NODE_INFO_COMMAND)) {
             message = new RequestNodeInfoCommand();
+        } else if (string.startsWith(REMOVE_NODE_MESSAGE)) {
+            message = parseRemoveNodeMessage(string);
         } else if (string.startsWith(ERROR_MESSAGE)) {
             String errorMessage = string.substring(1);
             message = new ErrorMessage(errorMessage);
         }
+
+        return message;
+    }
+
+    private static Message parseRemoveNodeMessage(String string) {
+        if (string == null || string.isEmpty()) {
+            throw new IllegalArgumentException("Deletion specification can't be empty");
+        }
+
+        String[] parts = string.split(":");
+        int nodeId = parseIntegerOrError(parts[1], "Invalid node ID:" + parts[1]);
+        NodeRemovedMessage message = new NodeRemovedMessage(nodeId);
 
         return message;
     }
@@ -185,6 +200,8 @@ public class MessageSerializer {
         } else if (message instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
             string = SENSOR_DATA_MESSAGE + ":" + sensorDataAdvertisementMessage.getNodeId() + ";"
                     + sensorReadingsToString(sensorDataAdvertisementMessage.getSensorReadings());
+        } else if (message instanceof NodeRemovedMessage nodeRemovedMessage) {
+            string = REMOVE_NODE_MESSAGE + ":" + nodeRemovedMessage.getNodeId();
         } else if (message instanceof NodeInfoMessage nodeInfoMessage) {
             Map<Integer, SensorActuatorNode> nodesInfo = nodeInfoMessage.getNodesInfo();
             String nodesData = nodesInfo.entrySet().stream()

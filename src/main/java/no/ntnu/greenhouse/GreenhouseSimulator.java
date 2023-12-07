@@ -14,9 +14,9 @@ import java.util.TimerTask;
 import no.ntnu.controlpanel.ControlPanelLogic;
 import no.ntnu.listeners.greenhouse.NodeStateListener;
 import no.ntnu.message.Message;
+import no.ntnu.message.NodeRemovedMessage;
 import no.ntnu.message.SensorDataAdvertisementMessage;
 import no.ntnu.tools.Logger;
-
 
 /**
  * Application entrypoint - a simulator for a greenhouse.
@@ -245,5 +245,17 @@ public class GreenhouseSimulator {
      */
     public void changeActuatorState(int nodeId, int actuatorId, boolean state) {
         this.getNodesInfo().get(nodeId).getActuators().get(actuatorId).set(state);
+    }
+
+    /**
+     * Removes a node from the simulator.
+     * 
+     * @param node the node to remove.
+     */
+    public void removeNode(SensorActuatorNode node) {
+        int nodeId = node.getId();
+        this.nodes.remove(nodeId);
+        NodeRemovedMessage message = new NodeRemovedMessage(nodeId);
+        this.sendResponseToAllClients(message);
     }
 }

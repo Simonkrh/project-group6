@@ -7,6 +7,7 @@ import no.ntnu.message.Command;
 import no.ntnu.message.ErrorMessage;
 import no.ntnu.message.Message;
 import no.ntnu.message.MessageSerializer;
+import no.ntnu.message.NodeRemovedMessage;
 import no.ntnu.message.SensorDataAdvertisementMessage;
 import no.ntnu.message.TurnOffActuatorCommand;
 import no.ntnu.message.TurnOnActuatorCommand;
@@ -39,7 +40,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     /**
      * Creates a new socket communication channel.
      * 
-     * @param logic      The application logic of the control panel node.
+     * @param logic The application logic of the control panel node.
      */
     public SocketCommunicationChannel(ControlPanelLogic logic) {
         this.logic = logic;
@@ -206,6 +207,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         } else if (serializedResponse instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
             this.logic.onSensorData(sensorDataAdvertisementMessage.getNodeId(),
                     sensorDataAdvertisementMessage.getSensorReadings());
+        } else if (serializedResponse instanceof NodeRemovedMessage nodeRemovedMessage) {
+            this.logic.onNodeRemoved(nodeRemovedMessage.getNodeId());
         } else if (serializedResponse instanceof ErrorMessage errorMessage) {
             Logger.error(errorMessage.getMessage());
         }
