@@ -192,6 +192,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
                 response = socketReader.readLine();
             } catch (IOException e) {
                 Logger.error(e.getMessage());
+                this.close();
             }
             if (response != null && !response.isBlank()) {
                 this.processResponse(response);
@@ -230,6 +231,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         try {
             if (socket != null && !socket.isClosed()) {
                 socket.close();
+                this.logic.onCommunicationChannelClosed();
             }
         } catch (IOException err) {
             System.err.println("Could not close server socket: " + err.getMessage());
