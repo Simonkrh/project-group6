@@ -12,9 +12,11 @@ public class SensorDataAdvertisementMessage implements Message {
     private final List<SensorReading> sensorReadings;
 
     /**
-     * Creates a new instance of SensorDataAdvertisementMessage with the specified node ID and sensor readings.
+     * Creates a new instance of SensorDataAdvertisementMessage with the specified
+     * node ID and sensor readings.
      *
-     * @param nodeId The ID of the node from which the sensor readings are coming.
+     * @param nodeId         The ID of the node from which the sensor readings are
+     *                       coming.
      * @param sensorReadings The list of sensor readings to be advertised.
      */
     public SensorDataAdvertisementMessage(int nodeId, List<SensorReading> sensorReadings) {

@@ -1,6 +1,5 @@
 package no.ntnu.message;
 
-
 import no.ntnu.controlpanel.ControlPanelLogic;
 
 /**
@@ -13,7 +12,7 @@ public class TurnOffActuatorCommand extends Command {
     /**
      * Creates a new instance of the TurnOffActuatorCommand class.
      *
-     * @param nodeId The ID of the node where the actuator is located.
+     * @param nodeId     The ID of the node where the actuator is located.
      * @param actuatorId The ID of the actuator to be turned on.
      */
     public TurnOffActuatorCommand(int nodeId, int actuatorId) {

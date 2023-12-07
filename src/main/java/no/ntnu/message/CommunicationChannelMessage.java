@@ -9,9 +9,11 @@ public class CommunicationChannelMessage implements Message {
     private final CommunicationChannel communicationChannel;
 
     /**
-     * Creates a new CommunicationChannelMessage with the specified communication channel.
+     * Creates a new CommunicationChannelMessage with the specified communication
+     * channel.
      *
-     * @param communicationChannel The communication channel to be associated with this message.
+     * @param communicationChannel The communication channel to be associated with
+     *                             this message.
      */
     public CommunicationChannelMessage(CommunicationChannel communicationChannel) {
         this.communicationChannel = communicationChannel;

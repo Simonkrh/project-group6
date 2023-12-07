@@ -7,11 +7,10 @@ import no.ntnu.greenhouse.SensorActuatorNode;
 import java.util.Map;
 
 /**
- * Represents a command to request information about all sensor and actuator nodes
- * in the greenhouse.
+ * Represents a command to request information about all sensor and actuator
+ * nodes in the greenhouse.
  */
 public class RequestNodeInfoCommand extends Command {
-
     @Override
     public Message execute(ControlPanelLogic logic) {
         GreenhouseSimulator simulator = logic.getGreenhouseSimulator();

@@ -13,12 +13,14 @@ import no.ntnu.message.MessageSerializer;
 import no.ntnu.tools.Logger;
 
 /**
- * Represents the handler for a specific TCP client connection in a TCP-based greenhouse simulator.
- * This class extends {@link Thread} and handles communication with a single client,
- * processing incoming requests and sending responses accordingly.
+ * Represents the handler for a specific TCP client connection in a TCP-based
+ * greenhouse simulator. This class extends {@link Thread} and handles
+ * communication with a single client, processing incoming requests and sending
+ * responses accordingly.
  *
- * This class is made with a lot of inspiration from the smart TV server example made by Girts Strazdins.
- * Link to this repository is <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
+ * This class is made with a lot of inspiration from the smart TV server example
+ * made by Girts Strazdins. Link to this repository is
+ * <a href="https://github.com/strazdinsg/datakomm-tools.git">...</a>
  */
 public class ClientHandler extends Thread {
     private Socket clientSocket;
@@ -29,9 +31,11 @@ public class ClientHandler extends Thread {
     /**
      * Creates a new instance for the ClientHandler call.
      *
-     * @param socket The socket associated with the client connection.
-     * @param greenhouseSimulator The TCP server class which this handler is part of.
-     * @throws IOException If an error occurs while trying to establish the input or the output streams.
+     * @param socket              The socket associated with the client connection.
+     * @param greenhouseSimulator The TCP server class which this handler is part
+     *                            of.
+     * @throws IOException If an error occurs while trying to establish the input or
+     *                     the output streams.
      */
     public ClientHandler(Socket socket, GreenhouseSimulator greenhouseSimulator) throws IOException {
         this.greenhouseSimulator = greenhouseSimulator;
@@ -56,7 +60,8 @@ public class ClientHandler extends Thread {
             }
             Command clientCommand = processRequest(clientRequest);
             if (clientCommand != null) {
-                System.out.println("Client request was successfully received: " + clientCommand.getClass().getSimpleName());
+                System.out.println(
+                        "Client request was successfully received: " + clientCommand.getClass().getSimpleName());
                 response = clientCommand.execute(this.greenhouseSimulator.getLogic());
                 if (response != null) {
                     this.sendResponse(response);
@@ -70,9 +75,11 @@ public class ClientHandler extends Thread {
     }
 
     /**
-     * Processes a client request by deserializing the message and casting it to a command if valid.
+     * Processes a client request by deserializing the message and casting it to a
+     * command if valid.
      *
-     * @param clientRequest The request received from the client before it is processed.
+     * @param clientRequest The request received from the client before it is
+     *                      processed.
      * @return a Command object if the request is valid, null if not.
      */
     private Command processRequest(String clientRequest) {
@@ -146,7 +153,7 @@ public class ClientHandler extends Thread {
             if (this.greenhouseSimulator != null) {
                 this.greenhouseSimulator.disconnectClient(this);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }

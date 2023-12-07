@@ -1,4 +1,5 @@
 package no.ntnu.message;
+
 /**
  * Represents an error message for a failed command execution.
  */

@@ -9,12 +9,13 @@ public class ActuatorStateMessage implements Message {
     private final boolean isOn;
 
     /**
-     * Creates a new instance of the ActuatorStateMessage class with the specified node ID, actuator ID,
-     * and actuator state.
+     * Creates a new instance of the ActuatorStateMessage class with the specified
+     * node ID, actuator ID, and actuator state.
      *
      * @param nodeId     The ID of the node.
      * @param actuatorId The ID of the actuator.
-     * @param isOn       The state of the actuator; true if the actuator is on, false otherwise.
+     * @param isOn       The state of the actuator; true if the actuator is on,
+     *                   false otherwise.
      */
     public ActuatorStateMessage(int nodeId, int actuatorId, boolean isOn) {
         this.nodeId = nodeId;

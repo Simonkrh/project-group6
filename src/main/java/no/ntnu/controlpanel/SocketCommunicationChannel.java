@@ -34,6 +34,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     private Socket socket;
     private BufferedReader socketReader;
     private PrintWriter socketWriter;
+
     /**
      * Creates a new socket communication channel.
      * 
@@ -48,10 +49,10 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     @Override
     public void sendActuatorChange(int nodeId, int actuatorId, boolean isOn) {
-        if(socket!= null && socket.isConnected()){
-            this.sendCommand(isOn ? new TurnOnActuatorCommand(nodeId, actuatorId) : new TurnOffActuatorCommand(nodeId, actuatorId));
-        }
-        else {
+        if (socket != null && socket.isConnected()) {
+            this.sendCommand(isOn ? new TurnOnActuatorCommand(nodeId, actuatorId)
+                    : new TurnOffActuatorCommand(nodeId, actuatorId));
+        } else {
             Logger.error("Could not connect the socket");
         }
     }
@@ -65,8 +66,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
             socketWriter.println(serializedCommand);
             return true;
         } catch (Exception e) {
-           Logger.error("Error while trying to send the command : " + e.getMessage());
-           return false;
+            Logger.error("Error while trying to send the command : " + e.getMessage());
+            return false;
         }
     }
 
@@ -132,15 +133,15 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         double value = parseDoubleOrError(valueParts[0], "Invalid sensor value: " + valueParts[0]);
         String unit = valueParts[1];
         return new SensorReading(sensorType, value, unit);
-      }
+    }
 
-  /**
-   * Spawns new sensor/actuator nodes after a given delay.
-   *
-   * @param specification The specification in the specified format
-   * @param delay         Delay in seconds
-   */
-  public void spawnNodes(String specification, int delay) {
+    /**
+     * Spawns new sensor/actuator nodes after a given delay.
+     *
+     * @param specification The specification in the specified format
+     * @param delay         Delay in seconds
+     */
+    public void spawnNodes(String specification, int delay) {
         if (specification == null || specification.isEmpty()) {
             throw new IllegalArgumentException("Node specification can't be empty");
         }
@@ -169,12 +170,12 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     private void fetchNodeData() {
         socketWriter.println("REQUEST_NODE_INFO");
-            String response = null;
-            try {
-                response = this.socketReader.readLine();
-            } catch (IOException e) {
-                System.err.println("Did not receive any response: " + e.getMessage());
-            }
+        String response = null;
+        try {
+            response = this.socketReader.readLine();
+        } catch (IOException e) {
+            System.err.println("Did not receive any response: " + e.getMessage());
+        }
         this.spawnNodes(response, 0);
     }
 
@@ -195,9 +196,11 @@ public class SocketCommunicationChannel implements CommunicationChannel {
     private void processResponse(String response) {
         Message serializedResponse = MessageSerializer.fromString(response);
         if (serializedResponse instanceof ActuatorStateMessage actuatorStateMessage) {
-            this.logic.onActuatorStateChanged(actuatorStateMessage.getNodeId(), actuatorStateMessage.getActuatorId(), actuatorStateMessage.isOn());
+            this.logic.onActuatorStateChanged(actuatorStateMessage.getNodeId(), actuatorStateMessage.getActuatorId(),
+                    actuatorStateMessage.isOn());
         } else if (serializedResponse instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
-            this.logic.onSensorData(sensorDataAdvertisementMessage.getNodeId(), sensorDataAdvertisementMessage.getSensorReadings());
+            this.logic.onSensorData(sensorDataAdvertisementMessage.getNodeId(),
+                    sensorDataAdvertisementMessage.getSensorReadings());
         }
     }
 

@@ -16,8 +16,10 @@ import static no.ntnu.tools.Parser.parseIntegerOrError;
  * Represents a serializer for messages to protocol-defined strings and vice
  * versa.
  * <p>
- * The message serializer has been developed and expanded out from the serializer used in the smart tv project by Girtz Strazdins.
- * <a href="https://github.com/strazdinsg/datakomm-tools/tree/b00e972fb8be43f4ed7f702529f71858975785df/LiveCoding2023"></a>
+ * The message serializer has been developed and expanded out from the
+ * serializer used in the smart tv project by Girtz Strazdins.
+ * <a href=
+ * "https://github.com/strazdinsg/datakomm-tools/tree/b00e972fb8be43f4ed7f702529f71858975785df/LiveCoding2023"></a>
  */
 public class MessageSerializer {
     public static final String TURN_ON_ACTUATORS_COMMAND = "on";
@@ -28,7 +30,6 @@ public class MessageSerializer {
     public static final String SENSOR_DATA_MESSAGE = "SENSOR_DATA";
     public static final String NODE_INFO_MESSAGE = "NODE_INFO";
     public static final String ERROR_MESSAGE = "e";
-
 
     /**
      * Creates a new instance of the MessageSerializer class.
@@ -112,12 +113,15 @@ public class MessageSerializer {
     }
 
     /**
-     * Parses a sensor data advertisement message from the given string.
-     * The expected format is "SENSOR_DATA:nodeId;sensorType1=value1 unit1,sensorType2=value2 unit2,...".
+     * Parses a sensor data advertisement message from the given string. The
+     * expected format is "SENSOR_DATA:nodeId;sensorType1=value1
+     * unit1,sensorType2=value2 unit2,...".
      *
-     * @param string the string containing the sensor data advertisement information.
+     * @param string the string containing the sensor data advertisement
+     *               information.
      * @return a SensorDataAdvertisementMessage object representing the parsed data.
-     * @throws IllegalArgumentException if the string format is incorrect or data is invalid.
+     * @throws IllegalArgumentException if the string format is incorrect or data is
+     *                                  invalid.
      */
     private static SensorDataAdvertisementMessage parseSensorDataAdvertisementMessage(String string) {
         if (string == null || string.isEmpty()) {
@@ -170,20 +174,24 @@ public class MessageSerializer {
     public static String toString(Message message) {
         String string = null;
         if (message instanceof TurnOnActuatorCommand turnOnActuatorCommand) {
-            string = TURN_ON_ACTUATORS_COMMAND + ":" + turnOnActuatorCommand.getNodeId() + ":" + turnOnActuatorCommand.getActuatorId();
+            string = TURN_ON_ACTUATORS_COMMAND + ":" + turnOnActuatorCommand.getNodeId() + ":"
+                    + turnOnActuatorCommand.getActuatorId();
         } else if (message instanceof TurnOffActuatorCommand turnOffActuatorCommand) {
-            string = TURN_OFF_ACTUATORS_COMMAND + ":" + turnOffActuatorCommand.getNodeId() + ":" + turnOffActuatorCommand.getActuatorId();
+            string = TURN_OFF_ACTUATORS_COMMAND + ":" + turnOffActuatorCommand.getNodeId() + ":"
+                    + turnOffActuatorCommand.getActuatorId();
         } else if (message instanceof ActuatorStateMessage actuatorStateMessage) {
-            string = (actuatorStateMessage.isOn() ? ACTUATOR_STATE_ON_MESSAGE : ACTUATOR_STATE_OFF_MESSAGE) +  ":" + actuatorStateMessage.getNodeId() + ":" + actuatorStateMessage.getActuatorId();
+            string = (actuatorStateMessage.isOn() ? ACTUATOR_STATE_ON_MESSAGE : ACTUATOR_STATE_OFF_MESSAGE) + ":"
+                    + actuatorStateMessage.getNodeId() + ":" + actuatorStateMessage.getActuatorId();
         } else if (message instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
-            string = SENSOR_DATA_MESSAGE + ":" + sensorDataAdvertisementMessage.getNodeId() + ";" + sensorReadingsToString(sensorDataAdvertisementMessage.getSensorReadings());
+            string = SENSOR_DATA_MESSAGE + ":" + sensorDataAdvertisementMessage.getNodeId() + ";"
+                    + sensorReadingsToString(sensorDataAdvertisementMessage.getSensorReadings());
         } else if (message instanceof NodeInfoMessage nodeInfoMessage) {
             Map<Integer, SensorActuatorNode> nodesInfo = nodeInfoMessage.getNodesInfo();
             String nodesData = nodesInfo.entrySet().stream()
                     .map(entry -> nodeInfoToString(entry.getKey(), entry.getValue()))
                     .collect(Collectors.joining("|"));
             string = NODE_INFO_MESSAGE + "|" + nodesData;
-        } else if (message instanceof ErrorMessage errorMessage)  {
+        } else if (message instanceof ErrorMessage errorMessage) {
             string = ERROR_MESSAGE + errorMessage.getMessage();
         }
         return string;
