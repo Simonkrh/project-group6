@@ -17,6 +17,7 @@ import no.ntnu.message.Message;
 import no.ntnu.message.SensorDataAdvertisementMessage;
 import no.ntnu.tools.Logger;
 
+
 /**
  * Application entrypoint - a simulator for a greenhouse.
  */

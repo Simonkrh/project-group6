@@ -47,6 +47,12 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     }
 
+    /**
+     * Sends the acturare state  over  the channel.
+     * @param nodeId     ID of the node to which the actuator is attached
+     * @param actuatorId Node-wide unique ID of the actuator
+     * @param isOn       When true, actuator must be turned on; off when false.
+     */
     @Override
     public void sendActuatorChange(int nodeId, int actuatorId, boolean isOn) {
         if (socket != null && socket.isConnected()) {
@@ -57,6 +63,11 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         }
     }
 
+    /**
+     * Send command to the clients
+     * @param command the command to be sent
+     * @return true if succesfully returned flase if not
+     */
     public boolean sendCommand(Command command) {
         if (socketWriter == null || socketReader == null) {
             return false;
