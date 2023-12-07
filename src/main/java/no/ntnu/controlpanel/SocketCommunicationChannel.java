@@ -4,6 +4,7 @@ import no.ntnu.greenhouse.Actuator;
 import no.ntnu.greenhouse.SensorReading;
 import no.ntnu.message.ActuatorStateMessage;
 import no.ntnu.message.Command;
+import no.ntnu.message.ErrorMessage;
 import no.ntnu.message.Message;
 import no.ntnu.message.MessageSerializer;
 import no.ntnu.message.SensorDataAdvertisementMessage;
@@ -208,6 +209,8 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         } else if (serializedResponse instanceof SensorDataAdvertisementMessage sensorDataAdvertisementMessage) {
             this.logic.onSensorData(sensorDataAdvertisementMessage.getNodeId(),
                     sensorDataAdvertisementMessage.getSensorReadings());
+        } else if (serializedResponse instanceof ErrorMessage errorMessage) {
+            Logger.error(errorMessage.getMessage());
         }
     }
 
