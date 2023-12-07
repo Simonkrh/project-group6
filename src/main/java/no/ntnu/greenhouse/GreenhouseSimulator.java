@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import no.ntnu.controlpanel.ControlPanelLogic;
 import no.ntnu.listeners.greenhouse.NodeStateListener;
 import no.ntnu.message.Message;
+import no.ntnu.message.SensorDataAdvertisementMessage;
 import no.ntnu.tools.Logger;
 
 /**
@@ -114,12 +117,40 @@ public class GreenhouseSimulator {
       }
       return clientHandler;
     }
+  
+  private void sendSensorDataPeriodically() {
+    if (this.serverSocket == null || this.serverSocket.isClosed()) {
+      return;
+    }
+    this.sendSensorDataAdvertisementMessages();
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        sendSensorDataPeriodically();
+      }
+    }, 1 * 1000L);
+  }
+
+  private void sendSensorDataAdvertisementMessages() {
+    List<SensorDataAdvertisementMessage> messages = new ArrayList<>();
+    for (Map.Entry<Integer, SensorActuatorNode> node : this.getNodesInfo().entrySet()) {
+      int nodeId = node.getKey();
+      SensorActuatorNode sensors = node.getValue();
+      SensorDataAdvertisementMessage message = new SensorDataAdvertisementMessage(nodeId, sensors.getReadings());
+      messages.add(message);
+    }
+    for (SensorDataAdvertisementMessage message : messages) {
+      this.sendResponseToAllClients(message);
+    }
+  }
 
   private void initiateRealCommunication() {
     int port = 10025;
     try {
       serverSocket = new ServerSocket(port);
       new Thread(() -> handleNewClients()).start();
+      new Thread(() -> sendSensorDataPeriodically()).start();
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException(e);

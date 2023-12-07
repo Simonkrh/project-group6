@@ -1,5 +1,6 @@
 package no.ntnu.greenhouse;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -312,5 +313,18 @@ public class SensorActuatorNode implements ActuatorListener, CommunicationChanne
     for (Actuator actuator : actuators) {
       actuator.set(on);
     }
+  }
+
+  /**
+   * Gets all the sensor readings from the node.
+   * 
+   * @return a list of sensor readings from all sensors in the node.
+   */
+  public List<SensorReading> getReadings() {
+    List<SensorReading> readings = new ArrayList<>();
+    for (Sensor sensor : this.sensors) {
+      readings.add(sensor.getReading()); 
+    }
+    return readings;
   }
 }
