@@ -296,18 +296,7 @@ public class SensorActuatorNode implements ActuatorListener, CommunicationChanne
         stop();
     }
 
-    /**
-     * Set an actuator to a desired state.
-     *
-     * @param actuatorId ID of the actuator to set.
-     * @param on         Whether it should be on (true) or off (false)
-     */
-    public void setActuator(int actuatorId, boolean on) {
-        Actuator actuator = getActuator(actuatorId);
-        if (actuator != null) {
-            actuator.set(on);
-        }
-    }
+
 
     /**
      * Set all actuators to desired state.

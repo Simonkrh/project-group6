@@ -160,8 +160,17 @@ public class ControlPanelApplication extends Application implements GreenhouseEv
     }
 
     private void removeNodeTab(int nodeId, Tab nodeTab) {
-        nodeTab.getTabPane().getTabs().remove(nodeTab);
-        nodeTabs.remove(nodeId);
+        if (nodeTab != null) {
+            TabPane tabPane = nodeTab.getTabPane();
+            if (tabPane != null) {
+                tabPane.getTabs().remove(nodeTab);
+            } else {
+                Logger.error("Node " + nodeId + " is already removed");
+            }
+            nodeTabs.remove(nodeId);
+        } else {
+            Logger.error("NodeTab is null for node " + nodeId);
+        }
     }
 
     private void addNodeTab(SensorActuatorNodeInfo nodeInfo) {
