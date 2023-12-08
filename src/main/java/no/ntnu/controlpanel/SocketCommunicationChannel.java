@@ -58,7 +58,7 @@ public class SocketCommunicationChannel implements CommunicationChannel {
 
     /**
      * Send command to the clients
-     * 
+     * Implemented with the help of girtz smart tv project.
      * @param command the command to be sent
      * @return true if successfully returned false if not
      */
@@ -229,6 +229,12 @@ public class SocketCommunicationChannel implements CommunicationChannel {
         }
         return isOpen;
     }
+
+    /**
+     * Closes the communication channel.
+     *This method attempt to close the socket ,if it is not already null or closed.
+     * It also informs the logic about the closure
+     */
 
     public void close() {
         try {
