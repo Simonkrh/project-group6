@@ -101,7 +101,6 @@ public class ControlPanelApplication extends Application implements GreenhouseEv
                     removeNodeTabPane();
                 }
             });
-            Logger.info("Node " + nodeId + " removed");
         } else {
             Logger.error("Can't remove node " + nodeId + ", there is no Tab for it");
         }
@@ -163,7 +162,6 @@ public class ControlPanelApplication extends Application implements GreenhouseEv
     private void removeNodeTab(int nodeId, Tab nodeTab) {
         nodeTab.getTabPane().getTabs().remove(nodeTab);
         nodeTabs.remove(nodeId);
-        Logger.info("Node " + nodeId + " removed");
     }
 
     private void addNodeTab(SensorActuatorNodeInfo nodeInfo) {
