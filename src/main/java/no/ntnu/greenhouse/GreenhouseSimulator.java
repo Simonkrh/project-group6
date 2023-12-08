@@ -181,10 +181,12 @@ public class GreenhouseSimulator {
      */
     public void stop() {
         stopCommunication();
-        for (SensorActuatorNode node : nodes.values()) {
+        List<SensorActuatorNode> tempNodeList = new ArrayList<>(nodes.values());
+        for (SensorActuatorNode node : tempNodeList) {
             node.stop();
         }
     }
+
 
     private void stopCommunication() {
         if (fake) {
